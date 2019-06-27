@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>bash</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link href="css/slides.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# CSCI 395.86 Open Source Software Development
+
+<br>
+
+## Working in the Linux Command-Line:
+### A Short List of the Best and Greatest Commands
+
+.author[
+Stewart Weiss <br>
+]
+
+
+
+.license[
+Unless noted otherwise all content is released under a
+ [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
+]
+
+
+---
+
+# Overview
+
+- There are many different Unix operating systems. __Linux__ is one of them.
+Other popular forms of Unix include BSD variants such as FreeBSD, proprietary
+versions such as IBM's AIX and Oracle's Solaris, and Android.
+
+- Most of what is in these slides is true of all "flavors" of UNIX, but some of
+it is only true of Linux.
+
+- There is too much to cover about working in the Unix command-line in a short slide
+presentation.
+
+- These slides cover many topics, none in great depth. But they are designed to
+cover the most important aspects of working in the _UNIX programming environment_.
+
+- Working in the command-line really means two things:
+    - using Unix __commands__ and
+    - using the __shell__.
+
+- These slides focus on commands primarily and just a bit about the most common Linux shell,
+__bash__. The next slide set covers `bash`.
+
+- You are encouraged to read the many resources on the topics presented here.
+The last slide has links to the ones I think are good and concise.
+
+---
+# A Bit about Shells
+
+- You need to know a bit about shells before you can type any commands in Unix,
+so we begin with the very basics.
+
+- A __shell__ is an interactive command-line interpreter for the operating
+system, but it is also  a programming language.
+
+- A __command-line interpreter__ is a program that displays a prompt
+(such as '$') and  waits for you to type a command.
+When you type the command followed by a _newline_ character, it "executes"
+that command and then redisplays the prompt and starts this cycle all over again.
+
+- Example:
+   ```bash
+     $ whoami
+     stewart
+   ```
+    - `whoami` is an unusual command - it displays your username just in case
+you forgot.
+
+- The prompt can be customized in many ways*. On the system in which I have
+prepared these slides, whose name is `harpo`, my prompt is
+   ```bash
+    [stewart@harpo slides]$
+   ```
+
+.footnote[
+The PS1 shell variable in `bash` controls the first level prompt string.
+]
+
+
+---
+# Command Introduction
+
+
+- Unix commands are the tools that you use to get things done in Unix. You type
+their names at the shell prompt, and they do their magic.
+
+- Examples
+   ```bash
+    $ date
+    Thu Mar 28 11:22:45 EDT 2019
+    $ echo "Hello world. Code responsibly!"
+    Hello world. Code responsibly!
+    $ wc  css/slides.css
+    167  332 2661 css/slides.css
+   ```
+
+    - The `date` command displays the current time and date;
+    - `echo` displays the strings that follow it on the command-line;
+    - `wc` is short for __w__ord __c__ount; it displays the number of lines,
+words, and characters in the file(s) whose names follow it on the command-line.
+
+---
+
+# Files and Directories
+
+- Files reside in a large tree called the __directory hierarchy__.
+Each  has  a  __pathname__  describing  the  path  from the root of the tree
+(which is called /) to the file.
+
+- A directory is just a special type of file that contains a table with file
+names and a way to find the actual files on the system's storage devices.
+
+- There are two special directories: the __home directory__, and the
+__current working directory__. The home directory is the one you see when you
+login to the Unix system. The current working directory is the one you are
+"currently in".
+
+- The home directory has the abbreviation `~` and the current  directory
+has the abbreviation  `.` ( a period).
+
+- The `ls` command displays the contents of a directory:
+   ```bash
+    $ls .
+    bash_tutorial.html css  img js
+   ```
+- As  a convenience, files in the current directory can be named by their last
+component. That is why a file like `/home/stewart/notes` can be abbreviated to
+`notes` when my current directory is `/home/stewart`.
+
+---
+# Types of Commands
+
+- Every Unix __command__ is either an executable file, or a command that is built
+into a shell (or sometimes both!)
+    - Commands like `ls` and `date` are executable binaries.
+    - Commands like `cd` and `bg` are usually __shell built-ins__;
+they are implemented within the shell program itself.
+    - Commands like `pwd` and `echo` are both shell built-ins and executable files.
+
+- If a command is an executable, the `which` command will display the (absolute)
+pathname of that executable:
+   ```bash
+    $which ls
+    /bin/ls
+   ```
+- The `type` command (which is built-in) displays the type(s) of its arguments:
+   ```bash
+    $type pwd cal
+    pwd is a shell builtin
+    cal is /usr/bin/cal
+   ```
+---
+# Getting Help
+
+- Of course you can do browser searches for help; on commands, but it is easier
+to use the resources found right on your machine.
+
+- The `man` command is the first thing to try. `man` is short for __man__ual.
+
+- To access the __manual page__ for a command, type `man` followed by the
+command name. E.g.,
+
+   ```bash
+    $man ls
+   ```
+brings up the man page (short for manual page) for `ls`.
+
+- There is also the `info` command, which works for those commands that have
+`info` pages. Not all pages do. Type
+   ```bash
+    $info
+   ```
+to see the starting page for the `info` system, which lists its table of contents.
+
+---
+# Categories of Commands
+
+- There are thousands of commands.
+Following are categories with the most useful commands in each, in no
+particular order.
+
+- File and Directory Processing
+    - `ls, more, less, cat, file, view, od, strings, pwd, basename, dirname,`
+`find, diff, cmp, touch, mv, cp, rm, rename, ln, cd , chmod, rmdir, mkdir`
+
+- Filters*
+    -  `awk, cat, cut, grep, head, less, more, od, paste, sed, shuf, sort, split, tac, tail, tr, uniq, wc`
+
+.footnote[
+* Some filters are listed above as well.
+]
+- System and User Information
+    - `date, domainname, du, groups, hostname, id, last, printenv, users, times, who`
+
+- Process and Job Control
+    - `bg, fg, jobs, pgrep, ps, kill, pkill, timeout, uptime, ^C, ^D, ^S, ^Q`
+
+- Miscellaneous
+    - `seq, echo, yes, man, bc`
+
+---
+# General Command Syntax
+- In general, commands may have options and arguments. The general form is
+   ```bash
+     commandname  [options]  arguments
+   ```
+where square brackets [] mean that the thing enclosed in them is optional.
+
+- Options begin with a hyphen `-`. Multiple options are usually allowed.
+For most commands, if the option does not require an argument of its own, it may be
+combined with other options using a single hyphen. E.g.:
+
+   ```bash
+    $ls -a -l  ~
+   ```
+can be written
+   ```bash
+    $ls -al ~
+   ```
+but
+   ```bash
+    $cut -d, -f2 names.csv
+   ```
+cannot be written
+   ```bash
+    $cut -df,2 names.csv
+   ```
+---
+
+# Viewing Files
+- Many of the commands to view the contents of files are simple to use. Some
+are intended for text files only, others any type of file. Because they are easy,
+no examples are given. Look up the syntax and options in the man pages.
+
+- All are used by following the command name with a list of files. They include:
+
+    - `more`  and `less`  -  display a screenful at a time of the given text files
+
+    - `view` -  brings up the `vi` editor in read-only mode. Use it only if you
+know `vi`. It can be given multiple text file names.
+
+    - `cat` -  "__c__oncatenates __a__nd __p__rints" its list of text file arguments. It whizzes
+by on the screen, so use it only to see small files.
+
+    - `od`  - displays an "octal dump" of any file, including binaries.
+It has lots of options to make it very useful.
+
+    - `strings` - print the strings of printable characters in files.
+It is very useful for finding the strings in compiled code.
+---
+# `ls`
+
+- This lists information about files and directories
+- Syntax:
+   ```bash
+    ls [option]... [file]...
+   ```
+If no files are given it lists information about the current directory.
+- Some very useful options:
+   ```bash
+       -l    - produce a "long" listing
+       -a    - show all files, including hidden ones
+       -F    - append trailing character to classify type
+       -t    - sort by time of last modification, most recent first
+       -R    - recursively list subdirectories
+   ```
+- Examples
+    - list all files in current directory with most recent first, classifying
+   ```bash
+    $ls -atlF
+   ```
+    - list all files sorted by access time
+   ```bash
+    $ls -atulF
+   ```
+---
+# `basename`
+
+- `basename` strips leading directory path and suffix from filenames
+
+- Syntax:
+   ```bash
+    basename pathname [suffix]
+   ```
+   outputs `pathname` with the leading path removed and, if it has a suffix matching `suffix`
+   with that removed also.
+
+- Examples:
+   ```bash
+    basename /usr/bin/sort
+              -> sort
+    basename include/stdio.h .h
+              -> stdio
+    basename include/stdio.h .foo
+              -> stdio.h   # i.e., suffix does not match
+    basename ~/hunter/cs395.86_s19/blogs/stewart-weekly  -weekly
+              -> stewart
+   ```
+
+
+---
+# `dirname`
+
+-  `dirname` strips the filename from a pathname, leaving the directory path.
+
+- Syntax:
+   ```bash
+    dirname pathname [pathname] ...
+   ```
+   outputs each pathname with its last non-slash component and trailing slashes
+       removed.
+
+
+- Examples:
+   ```bash
+    dirname /usr/bin/sort
+              -> /usr/bin
+    dirname /usr/bin/gcc /usr/lib/gcc /usr/share/man/man1/gcc.1.gz
+              ->
+                /usr/bin
+                /usr/lib
+                /usr/share/man/man1
+    dirname ~/hunter/cs395.86_s19/blogs/stewart-weekly
+              -> /home/stewart/hunter/cs395.86_s19/blogs
+   ```
+
+---
+# `find`
+
+- Its man page states, "search for files in a directory hierarchy", but this is
+an understatement. It is one of the most powerful commands available in Unix.
+
+- The `find` command allows you to apply commands and actions to all files matching
+a set of search criteria in one or more subtrees of the Unix file system.
+
+- Simplified syntax (some options suppressed):
+   ```bash
+       find  [starting-point...]  [expression]
+   ```
+
+- `starting-points` are the directories to act as the roots of the hierarchies to search.
+- `expression` describes what is to be searched for; it includes search criteria as
+well as actions to perform.
+
+- With no expression, `find` displays every file in the trees rooted at the `starting-points`.
+The default action is `-print`
+
+   ```bash
+    find . -print
+   ```
+is equivalent to
+   ```bash
+    find .
+   ```
+
+---
+#  `find`
+###  finding by file name
+
+- Finding (printing paths to) all files in the directory `dir` whose name ends in `.cpp`:
+   ```bash
+    find dir -name "*.cpp"
+   ```
+__Lesson__: The `*` is a shell wildcard that matches 0 or more characters, including the
+period if it is the first character in the name.
+
+- Finding all files in `dir` whose name is exactly `main.cpp`
+   ```bash
+    find dir -name "main.cpp"
+   ```
+--
+
+- Finding all files in `dir` whose name ends in any of `.jpg`, `.JPG`, `.JPg`, etc:
+   ```bash
+    find dir -iname "*.jpg"
+   ```
+__Lesson__: `-iname` is a case-insensitive version of `-name`.
+
+--
+
+- Finding all files in `dir` whose name ends in any of `.jpg`, `.JPG`, `.jpeg`, `.JPEG`, etc:
+   ```bash
+    find dir -iname "*.jpg"  -o -iname "*.jpeg"
+   ```
+__Lesson__: Expressions return `true` or `false`.
+`-iname` is a __test__ applied to each file as it is found. If the filename matches,
+it returns `true` otherwise `false`.
+The `-o` is a logical OR-operator; its operands above are `-iname "*.jpg"`
+and  `-iname "*.jpeg"`.
+If either is true then the filename passes the test.
+
+---
+# `find`
+### finding by time stamp
+
+- Unix timestamps files with three stamps: time of last access, time of last
+modification, and time of last change of status (file properties).
+
+- Finding files in `dir` that have been __modified__ within the past 3 hours:
+   ```bash
+    find dir -mmin -180
+   ```
+__Lesson__: -mmin expects an argument in minutes. The `-` in front of 180 means "less than".
+
+--
+
+- Finding files in `dir` that have been modified more than 3 hours ago:
+   ```bash
+    find dir -mmin +180
+   ```
+--
+
+- Finding files in `dir` that have been __accessed__ (use `-amin`) exactly 3 hours ago:
+   ```bash
+    find dir -amin 180
+   ```
+--
+
+- Finding files in `dir` whose __status changed__ (use `-cmin`) within the past 8 hours:
+   ```bash
+    find dir -cmin -480
+   ```
+
+---
+# `find`
+### finding by other properties
+
+- In Unix, properties such as size, type, permissions,  user ownership, group
+ownership, and more, are stored in a special structure called an __inode__. `find`
+can test any of these properties.
+
+- Finding files in `dir` larger than 500 Kilobytes (1024 bytes):
+   ```bash
+    find dir -size +500k
+   ```
+
+--
+
+The letter after the number can be `c`, `w`, `k`, `M`, or `G`. Guess what they stand for.
+- Finding files in `dir` that are executable:
+   ```bash
+    find dir -executable
+   ```
+--
+
+- Finding files in `dir` that are owned by user stewart and group cs_ossd
+   ```bash
+    find dir -user stewart -a -group cs_ossd
+   ```
+__Lesson__: `-a` is the logical AND-operator
+
+---
+# `find`
+### finding by other properties
+
+- Finding files in `dir` for which people other than the owner and the group
+have write access, whether or not the owner or group does.
+   ```bash
+    find dir -perm  -002
+   ```
+It is dangerous to let anyone be able to write to a file. This looks for all
+such files.
+
+- Finding files in `dir` for which the owner has read, write, execute permission
+and no one else has access of any kind:
+   ```bash
+    find dir -perm  700
+   ```
+- Finding files in `dir` that are __regular__ files:
+   ```bash
+    find dir -type f
+   ```
+To find directories, replace `f` with `d`.
+
+---
+# `find`
+### taking actions when files are found
+
+- You can use add __actions__ to expressions. These actions can be applied to
+the files for which the test returns true, or to a set of arguments that follow
+the action.
+
+- Useful actions include `-print`, `-prune`, and `-exec`.
+There are many others.
+
+    - `-prune` is used to prune the search, i.e., prevent it from descending the tree.
+    - `-exec  <command>` executes the <command> that follows it.
+
+- Run the `file` command on every regular file below the current directory :
+   ```bash
+    find . -type f -exec file '{}' \;
+   ```
+__Lesson__: `exec` is followed by a command. `{}` after the command is replaced
+by the file that matched the test. It must be written in quotes, and the semicolon
+must be escaped with backslash as shown.
+
+- Remove every file whose names ends in `~` below the current directory (dangerous
+if you make a mistake):
+   ```bash
+    find . -name "*~" -execdir /bin/rm '{}' \;
+   ```
+
+---
+
+# Streams, Files, and Redirection
+
+- A __stream__ is a flow of bytes into or out of a running process. In Unix, a stream is
+implemented with a data structure that includes buffers to store the bytes and
+various data members to control its flow and keep track of the status of the
+stream.
+
+- Unix provides every running process with three __standard streams__:
+    - __standard input__, __standard output__, and __standard error__
+
+
+
+
+<img src="img/stdinout.GIF" width="300" style="float:right;" >
+
+
+- Streams can be connected to devices or files or other processes, as you will
+see shortly.
+
+- When a process is created, it is given an array that has pointers to its
+open files;  pointers to these three streams occupy the first three array
+entries, namely standard input is index 0, standard output 1, and standard
+error 2.
+
+- Initially, standard input is connected to the keyboard
+(terminal device), and  standard output and error, the terminal device*.
+
+.footnote[
+* The terminal window is called a pseudo-terminal in Unix.
+]
+
+
+---
+# File Descriptors and Streams
+
+- The index values in the array of open files belonging to the process
+are called __file descriptors__. The table below summarizes the different
+views of the standard streams.
+
+File<br> Descriptor | Stream | Associated Device |  C symbolic name
+:---|:---|:---|:---
+ 0      | Standard Input | Keyboard |stdin
+ 1      | Standard Output | Screen or Terminal Window | stdout
+ 2      | Standard Error | Screen or Terminal Window |stderr
+
+
+---
+# Redirection
+### Input Redirection
+
+- All shells allow for  any stream to be disconnected from its
+default device and reconnected to or from files,
+the streams of other processes, or other devices. This is called
+__I/O redirection__.
+
+- Attaching a file to the standard input is called __input redirection__.
+The `<` operator is the __input redirection operator__:
+
+   ```bash
+    command < file
+   ```
+Example:
+   ```bash
+    cat < file1
+   ```
+The contents of file1 are redirected to the standard  input of the `cat` command,
+which is not very useful, but illustrates the idea.
+
+---
+# Redirection
+### Input Redirection
+
+The `bc` command can be used as a simple calculator. If you type `bc` on the command line,
+it waits for you to enter  an arithmetic expression such as 25 + 4 or
+something more complex. When you type <enter> it evaluates and prints the
+expression.
+
+6 + 4
+--
+<br>
+10
+--
+<br>
+12 ^ 2
+--
+<br>
+144
+
+--
+
+Suppose `file1`  contains the sequence of arithmetic expressions
+   ```bash
+    6 + 4
+    12 ^ 2
+   ```
+--
+Run the command `bc < file1` at the command prompt:
+   ```bash
+    $ bc < file1
+    10
+    144
+   ```
+This shows that file1 replaced `bc`'s standard input.
+---
+# Redirection
+### Output Redirection
+
+- Attaching a file to the standard output is called __output redirection__.
+The `>` operator is the __output redirection operator__:
+   ```bash
+    command > file
+   ```
+Example
+   ```bash
+    cat file1 file2 file3  > combined_file
+   ```
+concatenates files `file1`, `file2`, and `file3` into a new file named `combined_file`.
+
+ If `combined_file` already existed and the `bash` variable `noclobber` is set,
+ the command fails and you will see an error message such as
+   ```bash
+    bash: combined_file: cannot overwrite existing file
+   ```
+--
+
+ To overcome this, use the `>|` operator, which will forcibly replace the existing file:
+
+   ```bash
+    cat file1 file2 file3  >| combined_file
+   ```
+---
+# Redirection
+### Error Redirection
+
+- Attaching a file to the standard error is called __error redirection__.
+The `>` operator is also used to redirect standard error, but with a slight
+modification; use
+   ```bash
+    command 2> file
+       ```
+__No space__ between `2` and `>`.  `2` is the file descriptor for
+the standard error stream. In general, if _n_ is a file descriptor, _n_`>` redirects
+ the stream associated with it to the file.
+
+--
+
+- To send the errors of a command to one file and the standard output to another,
+the simplest solution (there are a few ways to do this) is:
+   ```bash
+    command 2> error_file  > output_file
+   ```
+ If either file exists and `noclobber` is set, it will fail;
+to overwrite them use
+   ```bash
+    command 2>| error_file  >| output_file
+   ```
+
+- To redirect the standard output and the standard error to the __same__ file,
+use
+   ```bash
+    command &> file
+   ```
+
+
+---
+# Redirection
+###  Redirection Examples
+
+- Some commands can produce many error messages. Sometimes you don't care about
+the errors. If you try to display the _entire file system_ (bad idea) using `ls -R`
+there will be many `permission denied` errors. The way to discard them is like
+this:
+
+   ```bash
+    ls -R /  2>/dev/null  > verybigfile
+   ```
+__Lesson__: `/dev/null` is a black hole; any data written to it is discarded.
+
+- We can take advantage of the fact that __the `cat` command reads from standard
+input if it is not given a filename as an argument__, to create a plain text file
+while taking notes, like this:
+   ```bash
+    $ cat > notes
+    blah blah blah
+    ^D (Control D to stop)
+    $ cat notes
+    blah blah blah
+   ```
+ We must type Control-D  to terminate the
+`cat` command and close the new file named notes.
+
+---
+# Redirection
+### Appending
+
+- To append to a file (or to create it if it does not exist) use the
+`append redirection operator` `>>`.
+
+   ```bash
+    command >> file
+   ```
+ which adds the output of the command to the end of the file.
+
+- Sometimes you will find it useful to log the results of a command that you
+run, or perhaps log its errors. Suppose `backup` is some backup command that you run
+every day. You can do either:
+   ```bash
+    backup 2>> ~/.backup_errlog  >> ~/.backuplog
+   ```
+which sends the errors of the command to one log file and the standard output to
+another.
+---
+# Pipes
+
+- Attaching the standard output of one command to the standard input of another
+is done by creating a __pipe__.
+The `|` operator is the __pipe operator__.
+    - Syntax:
+       ```bash
+        command1 | command2
+       ```
+
+- The real power of pipes is that they can be used with __filters__. Examples of
+pipes will follow the introduction of filters.
+
+
+---
+# Filter Introduction
+
+- A filter is a UNIX command whose input and output are plain text,
+and that expects its input from standard input and puts its output
+on standard output.
+
+- Most filters will also read their input from one or more filenames listed
+on their command-line.
+
+- Filters are useful because their output is a transformation of their
+input, in one way or another, such as by sorting it, removing words or lines
+based on a pattern or on their position in the line or file.
+
+- Filters are chained together with multiple pipes to do become the workhorses of
+Unix systems.
+
+---
+# Filter Synopsis
+
+Filter | Description
+:--- |:---
+`awk`  |  pattern scanning and processing language
+`cat`  |  concatenate files and print on the standard output
+`cut`  |  remove sections from each line of files
+`fold`  |  wrap each input line to fit in specified width
+`grep, egrep, fgrep`  |  print lines matching a pattern
+`head`  |  output the first part of files
+`less`  |  does more than `more`; see `more` below.
+`more`  |  file perusal filter for crt viewing
+`od`  |  dump files in octal and other formats
+`paste`  |  merge lines of files
+`sed`  |  stream editor for filtering and transforming text
+`shuf`  |  generate random permutations
+`sort`  |  sort lines of text files
+`split`  |  split a file into pieces
+`tac`   |  concatenate and print in reverse order
+`tail`  |  output the last part of files
+`tr`  |  translate or delete characters
+`uniq`  |  report or omit repeated lines
+`wc`  |  print newline, word, and byte counts for each file
+
+---
+# `cat` and  `tac`
+
+- The `cat` command is a technically a filter, but without options it does
+no transformation: its output is exactly its input.
+
+- It does have some handy uses. The `-n` option numbers lines, `-b` numbers
+non-blank lines, `-s` _squeezes_ blank lines, and `-v` shows non-printing characters:
+
+   ```bash
+    ls  . | cat -n
+     1	bash_tutorial_01.html
+     2	css/
+     3	img/
+     4	js/
+   ```
+ lists the current directory and numbers the lines.
+
+- `tac` prints the lines in reverse order. I rarely have use for it.
+
+   ```bash
+    ls  . | cat -n | tac
+     4	js/
+     3	img/
+     2	css/
+     1	bash_tutorial_01.html
+   ```
+---
+#  `head` and `tail`
+- Simply put, `head` displays the first _N_ lines of its input and `tail`, the last
+_N_ lines. By default for both,  _N_ is 10. To print a different number of lines,
+explicity use `-N` where _N_ is a positive integer:
+
+   ```bash
+    head -1 myfile
+   ```
+ displays just the first line of `myfile`, and
+
+   ```bash
+    tail -1 myfile
+   ```
+ displays the last line.
+--
+
+- One way to print the _nth_ line of a file is like
+this:
+   ```bash
+    head -4 myfile | tail -1
+   ```
+ which prints the 4th line of `myfile`. So I can use the following pipeline to
+get the summary of any command from the man page for it:
+
+   ```bash
+    man awk | head -4 | tail -1
+   ```
+ since the summary is always line 4.
+---
+#  `sort`
+- `sort` is one of the most useful and easy to use filters:
+
+   ```bash
+    sort myfile
+   ```
+ will sort the text file named `myfile` and print it on standard output.
+
+--
+
+- But its exact behavior varies from one system to another; there are many
+different implementations of `sort`.
+
+--
+
+- By default it uses the current `locale` settings
+(the _collating order_ set in your environment*).
+The major difference in English is whether uppercase precedes lowercase
+or whether case is ignored.
+
+- Locales are a subject way ahead of us. Suffice it to say that locale
+environment variables control how information is displayed in the
+terminal, such as the language and character set, numbers, dates, times, and more.
+
+.footnote[
+* The collating order is the order of the characters in the
+character code of the terminal, which is usually ASCII or UTF-8.
+]
+
+---
+#  `sort` Examples
+
+- Assume `myfile` contains the lines
+   ```bash
+     a
+     b
+     A
+     B
+   ```
+ Forcing the locale to be U.S. English and running `sort`:
+   ```bash
+    LC_COLLATE="en_US.UTF-8"  sort myfile
+    a
+    A
+    b
+    B
+   ```
+ Forcing the locale to be the "C" locale  and running `sort`:
+   ```bash
+    LC_COLLATE=C  sort myfile
+    A
+    B
+    a
+    b
+   ```
+---
+#  `sort` Examples
+
+- To force `sort` to ignore case and fold upper and lower case together, using
+GNU's `sort`, the option is `-f`:
+   ```bash
+    LC_COLLATE=C  -f sort myfile
+    a
+    A
+    b
+    B
+   ```
+
+- `sort` by default will treat numbers like strings. For example, it will sort
+1, 2, 10, 20 in this order:  1, 10, 2, 20.
+
+- To tell `sort` to sort __numerically__, use `-n`.
+
+- To tell `sort` to __reverse__ its order, use `-r`.
+
+- To tell `sort` to delete duplicate lines on output, use `-u`.
+
+- `sort` can sort by __fields__ in a line. The GNU version uses the `-k` option
+to specify the specific _key_ position (1-based). The `-t` option tells `sort`
+what character keys in the line. By default `sort` uses whitespace. If a file
+has colon-separated fields, and you want to sort numerically by field 2, use
+   ```bash
+      sort -t':' -k2 -n   myfile
+   ```
+---
+#  `uniq`
+
+- `uniq` filters out matching adjacent lines from its input stream, sending
+unique lines to output.  If the input stream is sorted and has duplicates, this
+produces output with duplicates removed:
+```bash
+ sort mydata | uniq
+```
+ produces a stream of unique lines from the file `mydata`.
+
+- It has several useful options as well:
+   ```bash
+       -i    - ignore case when trying to match
+       -c    - prefix lines by the number of occurrences
+       -d    - only print duplicate lines, one for each group
+       -u    - only print the unique lines
+
+   ```
+
+---
+# Combining Filters
+
+- Putting some of this filters together,
+NYC Open Data has a database of baby names whose lines look like this:
+```bash
+2011,FEMALE,HISPANIC,Geraldine,13,75
+2011,FEMALE,HISPANIC,GIA,21,67
+2011,FEMALE,HISPANIC,GIANNA,49,42
+...
+```
+- Many names are repeated. We can get the frequencies of each name using
+this pipeline, assuming the file is named `babynames.csv`:
+```bash
+ sort -k4 babynames.csv | cut -d, -f4 | uniq -ic
+```
+ where `sort` sorts using the 4th field, after which `cut`* prints only the 4th field, then
+ `uniq` filters out duplicates and puts counts to the left of the names, ignoring
+ case.
+.footnote[
+* The `cut` filter is described later in these slides.
+]
+
+ We can get the ten most frequent names like this:
+```bash
+ sort -k4 babynames.csv | cut -d, -f4 | uniq -ic | sort -k1 -nr | head -10
+```
+---
+
+# Filters: `grep`, `egrep`, and `fgrep`
+
+- These commmands are the most powerful of all.
+`grep` and `egrep` are given a pattern, called a __regular expression__, and
+use this to filter lines that match the pattern.
+`fgrep` is a _fast_, fixed-string version that does not use patterns.
+
+- Regular expressions are complex;  mastering them is worth the effort because
+they are used by `vi`, `sed`, `ed`, `awk`, `grep`, and `egrep`.
+
+- Some  examples to start:
+   ```bash
+    grep '\<cout\>'  prog.cpp
+   ```
+--
+ prints all lines containing the exact word `cout` in file `prog.cpp`.
+
+--
+   ```bash
+    grep -c '^ *$' prog.cpp
+   ```
+--
+ prints a count of the number of lines in `prog.cpp` that contain only blanks or
+no characters at all.
+
+--
+   ```bash
+    grep  '\/\*.*\*\/' prog.cpp
+   ```
+--
+ prints all lines in `prog.cpp` that have C-style comments `/* ... */`.
+
+__Lesson__: Enclose the pattern in single quotes  to
+ prevent the shell from interfering.
+
+---
+# Regular Expression Rules
+- In the rules that follow, `\0` denotes an empty string.
+- The complete set of rules can be found in the __regex__ man page in
+section 7, which defines the POSIX-compliant regular expressions.
+
+- Any sequence of characters matches itself: __abc__ matches the string "abc".
+
+
+- A regular expression followed by \* matches the concatenation of 0 or more
+strings each of which is matched by the regular expression. \* is called the
+__closure__ operator.
+    -  __`a*`__ matches 0 or more `a`'s:
+       - `\0`, `a`, `aa`, `aaa`, ...
+
+    -  __`ab*`__ matches `a` followed by 0 or more `b`'s:
+       -  `a`, `ab`, `abb`, `abbb`, ...
+
+    -  __`ab*ac*`__ matches `a` followed by 0 or more `b`'s followed by `a` followed
+ by 0 or more `c`'s:
+       -  `aa`, `aba`, `aac`, `abba`, `abac`, `aacc`, `abbba`, `abbac`, ...
+
+
+---
+# Regular Expression Rules
+
+- Use __`\( \)`__  to group for applying \* to more than one character:
+    - __`\(ab\)*`__ matches 0 or more `ab`'s:
+        - `\0`, `ab`, `abab`, `ababab`, ...
+
+- If you use __extended regular expressions__ either by writing  `grep -E`
+or by using  `egrep` instead, you can use `+`, the __positive closure__ operator.
+It matches __1 or more__ strings each of which is matched by the preceding
+regular expression. You can also use ordinary parentheses for grouping:
+   ```bash
+      egrep '(ab)+' myfile
+      grep -E  '(ab)+' myfile
+   ```
+ both match all lines in `myfile` that have 1 or more consecutive `ab` substrings.
+
+- Warning:
+   ```bash
+      grep '(ab)*' myfile
+   ```
+ only matches `\0`, `(ab)`, `(ab)(ab)`, ...
+because `grep` was used instead of `egrep`.
+
+---
+# Regular Expression Rules
+### Character Classes
+
+- The period __`.`__ matches any single character.
+
+
+ ` ` | ` `
+:--- |:---
+__`[list-of-characters]`__ | matches any single character in the list.
+__`[a6j&]`__       | matches a, 6, j, or &
+__`[0-9]`__        |  matches any single digit
+__`[a-zA-Z0-9]`__  |  matches any letter or digit
+__`[]]`__      |  matches right square bracket `]`
+__`[0-9-]`__    |matches any single digit or hyphen
+__`[-0-9]`__     | matches any single digit or hyphen
+__`[_a-zA-Z0-9]`__ | matches any letter, digit or underscore.
+
+
+- __`\w`__ is a shorthand for __`[_a-zA-Z0-9]`__. These characters are called
+__word characters__.
+
+- The `^` inside brackets means the complement:
+
+
+ ` ` | ` `
+:--- |:---
+__`[^a6j&]`__  | matches anything except a, 6, j, and  &
+__`[^0-9]`__   | matches anything except a digit.
+
+
+---
+# Regular Expression Rules
+### Character Classes
+
+- You can combine character classes with the * operator to create useful patterns:
+
+
+ ` ` | ` `
+:--- |:---
+__`\(c[acgt]g\)*`__ | matches 0 or more sequences of `cag`, `ccg`, `cgg`,or `ctg`
+__`[1-9][0-9]*`__   | matches any decimal numeral except 0
+__`[A-Z][a-z]*`__   | matches words that start with an uppercase letter.
+__`[a-zA-Z_][_a-zA-Z0-9]*`__   | matches C/C++ identifiers.
+
+__`\(...\)*`__      | matches any string whose length is a multiple of 3.
+
+
+---
+# Regular Expression Rules
+### Anchors
+
+- The caret __`^`__ anchors a regex to the beginning of a line,
+and the dollar sign, __`$`__, anchors it to the end of the line.
+
+- __`\<`__ anchors a regex to the start of a word. This means that  the character
+before it must be a non-word character.
+
+- __`\>`__ anchors the regex to the
+end of a word. This means that the character after it is a non-word character.
+
+
+ ` ` | ` `
+:--- |:---
+__`^drwx`__   | matches lines whose first 4 characters are drwx
+__`^\w`__     | matches lines that begins with a letter or digit or underscore
+__`abcd$`__   | matches lines whose last 4 characters are abcd
+__`^abc$`__   | matches lines that contain only abc
+__`^$`__      | matches empty lines
+__`^[ ]*$`__  | matches empty lines or lines containing only spaces
+__`\<fred`__ | matches any word starting with `fred` but not words like `alfred`
+__`fred\>`__ | matches any word ending with `fred` but not words like `freddy`
+__`\<fred\>`__ | matches exactly  `fred` surrounding by non-word characters
+
+---
+# Regular Expression Rules
+### Backreferences
+
+- When you enclose a basic regular expression in __`\( \)`__ brackets, or an extended
+regular expression in ordinary parentheses __`( )`__,
+the string that matched it is "remembered" for future use.
+
+- The regular expression __backreference__, __`\1`__, matches the first such
+"remembered string." In
+
+      __`\(aa*\)b\1`__
+
+      any string that matches `aa*` is saved into a storage cell named \1.
+ The only strings that this expression matches are
+ `aba`, `aabaa`, `aaabaaa`, `aaaabaaaa`, ...,.
+
+- In general, the expressions `\1`, `\2`, `\3`, …, `\9` remember matches of the
+1st, 2nd, 3rd, up to 9th parenthesized regular expressions.
+
+- The expression
+
+    __`^\(.*\):\(.*\)::\1:\2$`__
+
+    matches lines of the form
+       `x:y::x:y`     where `x` and `y` are possible empty strings, such as
+
+    abc:666::abc:666
+
+---
+# Filters: `cut` and `paste`
+### `cut`
+
+- Both  `cut` and `paste` are handy. `cut` can be used to cut lines in specific
+places, whether at character positions, or by field positions, and can output
+the cut pieces with different output delimiters. You can specify what delimits
+the fields.
+
+- The default field separator is the TAB character.
+
+- You can use `cut` on csv files to pick out columns:
+
+- Examples
+   ```bash
+    cut -f1,5 -d: /etc/passwd
+   ```
+ prints the first and fifth fields of the `/etc/password` file, i.e., the username and "gcos"
+field.
+   ```bash
+    cut –c1-10  myfile
+   ```
+ prints only the first 10 characters of each line of `myfile`.
+
+
+---
+# Filters: `cut` and `paste`
+### `paste`
+
+- `paste` combines lines  consisting  of  the sequentially corresponding
+lines from different files, separated by TABs, to standard output.
+
+- Example:
+Suppose that there are two files named `cities` and `countries` whose contents
+are as shown below (in two columns to save space.)
+.left-column2[
+```bash
+$ cat cities
+Rome
+Paris
+London
+Dublin
+Tokyo
+```
+]
+.right-column2[
+```bash
+$ cat countries
+Italy
+France
+England
+Ireland
+Japan
+```
+]
+.below-column2[
+Then the `paste` command will "merge" the files onto standard output,
+separating the words with tabs:
+```bash
+$ paste cities countries
+Rome    Italy
+Paris   France
+London  England
+Dublin  Ireland
+Tokyo   Japan
+```
+]
+---
+# Filters: `cut` and `paste`
+### `paste`
+
+- We can feed standard input into the `paste` command simultaneously. A
+hyphen '-' represents standard input when it is used in place of a filename
+argument, as in
+  ```bash
+    paste file -
+  ```
+
+ We can use this idea to add numbers to the lines in our previous example,
+ e.g. line 1, 2,3, 4, and 5, as follows:
+```bash
+$seq 1 5 | paste -  cities countries
+1	Rome    Italy
+2	Paris   France
+3	London  England
+4	Dublin  Ireland
+5	Tokyo   Japan
+```
+- See what happens when you try
+```bash
+$seq 1 30 | paste -  - -
+```
+ Pretty interesting?
+
+---
+#  `awk`
+
+- `awk` is not just an extremely powerful filter; _it is a programming language_.
+The `awk` filter implements the AWK programming language, named after its
+authors, __A__ho, __K__ernighan, and __W__einberger.
+
+- You give `awk` a program and files on which the program is run, and `awk` runs
+the program on one file after another. The program is either enclosed in single
+quotes on the command line, or passed to `awk`  in a file like so:
+   ```bash
+    awk [AWK-OPTIONS] -f program-file  file ...
+   ```
+
+- If the program is enclosed in single quotes on the command-line, then you
+run `awk` like this:
+   ```bash
+   awk [AWK-OPTIONS]  'program-text' file ...
+   ```
+
+- Unlike the other filters, `awk` treats each input line as a sequence of fields,
+delimited by an __input field separator__, by default any amount of whitespace.
+Fields are named `$1`,`$2`, `$3`, and so on. $0 is the entire line.
+
+- If there is no file argument, `awk` reads from standard input.
+
+- There is a lot to learn about `awk` - these slides contain just some
+simple examples.
+---
+# `awk`
+
+- Every `awk` program is a sequence of __pattern-action__ instructions or
+function definitions*.
+
+.footnote[
+* There are other kinds of statements as well, not covered here.
+]
+
+- A pattern-action instruction is of the form
+   ```bash
+    pattern  {action}
+   ```
+  where the pattern can be any of
+    - `BEGIN`
+    - `END`
+    - a regular expression
+    - a comparison
+    - empty
+
+ and the action is an instruction in a mostly C-like syntax.
+
+- Example
+   ```bash
+    awk   ' $1 == "reboot"  {print $2; }'  file1 file2 file3
+   ```
+which prints the second field in any line whose first field is the string
+"reboot" from the input files `file1`, `file2`, and `file3`.
+---
+# `awk`
+- The input field separator can be a character or a regular expression.
+The command-line option `-F` sets it; use single quotes to protect
+regular expressions from the shell:
+```bash
+ awk -F:  '{print $3}' /etc/passwd
+```
+ which separates fields with the colon ":", and
+```bash
+ awk -F'aa*'  '{print $3}' file1
+```
+ which separates fields with one or more `a`'s.
+
+- Simples uses of `awk` are to print lines with fields
+that meet a condition, or to print the fields in a different order. `awk` has both
+a simple `print` instruction as well as all forms of the `C` `printf`:
+
+ ```bash
+  awk -F, ' {print $1, $2}' names.csv
+ ```
+ prints the first two fields of every line with a space between them, whereas
+ ```bash
+  awk -F, '{printf "%s\t%s\n", $1, $2}' names.csv
+ ```
+ prints the first two fields with a TAB between them and a newline
+after.
+---
+# `awk`
+
+- The __`BEGIN`__ pattern causes `awk` to execute the associated action __before__
+reading its input. The __`END`__ pattern's action is executed __after__ all
+input has been read. The following adds the values of field $1 on all
+lines and prints their sum.
+```bash
+   awk ' BEGIN { sum = 0 } { sum += $1 } END { print sum }'
+```
+ -  `awk` has variables that do not need declarations, and
+ -  `awk` has operators just like those in C.
+
+- The `awk` built-in variable __`NR`__ is the total number of records (lines) read
+so far.  __`NF`__ is the number of fields on the current line, so this command
+prints the average of the field $1 values:
+```bash
+   awk ' BEGIN { sum = 0 } { sum += $1 } END { if ( NR > 0 ) { print sum/NR } }'
+```
+- This
+```bash
+  awk ' { printf "Line %d has %d fields.\n", NR, NF }'
+```
+ displays for each input line, a line of the form
+```bash
+  Line 1 has 10 fields.
+   ...
+```
+---
+# `awk`
+
+- The variable `$NF` is the last field on a line, so
+```bash
+ awk '{ print $NF }'
+```
+ prints the last field on every input line.
+
+- The variable `FNR` is the input record number __in the current input file__.
+ We can print the headings of a CSV file using the following `awk` script:
+```bash
+  cat somecsvfile.csv | awk -F, ' \
+    {
+      if (FNR==1) \
+          for (i=1; i<=NF; i++) \
+              printf "Field %d:\t%s\n",i,$i \
+    }'
+```
+  The backslashes are needed to prevent the shell from treating each line as
+a separate command. Notice that `$i` is used to iterate through
+`$1`, `$2`,... `$NF`.
+
+---
+# `awk`
+
+- You can use extended regular expression matching in the pattern:
+```bash
+ awk -F, ' BEGIN {sum = 0}  $1 ~ /[AB].*/  { sum += $3 } END {print sum}' names.csv
+```
+ which adds the values from field $3 for all input lines whose first field starts
+with an "A" or a "B" from the csv file `names.csv`. All extended regular
+expressions can be used in `awk`. They must be enclosed in `/  /` brackets.
+
+- Logical expressions can be patterns. This `awk` script finds the smallest
+unused user id in the password file to assign to a new user:
+
+ ```bash
+  ypcat passwd | \
+   awk 'BEGIN {FS = ":" ; MAX = 0 } ($3 > MAX ) {MAX = $3}  \
+          END  {printf " %s\n",  MAX+1} '
+ ```
+ The baskslashes are used at the ends of lines that are part of the command.
+ And `FS` is the field separator variable. This is another way to dynamically
+ change it.
+
+---
+# `awk`
+
+- `awk` has the following control flow statements:
+  - if (condition) statement [ else statement ]
+  - while (condition) statement
+  - do statement while (condition)
+  - for (expr1; expr2; expr3) statement
+  - for (var in array) statement
+  - break
+  - continue
+  - delete array[index]
+  - delete array
+  - exit [ expression ]
+  - { statements }
+  - a switch statement like C's.
+
+- `awk` also has many built-in functions, including numeric functions,
+ string functions, time functions, bit manipulationm and more.
+
+- It has array variables as well.
+
+- There is much more to `awk` than can be described in a few slides. The man
+page is a good place to look for a comprehensive description of what it can do.
+
+---
+# Filters yet to come:
+
+- Some filters have not yetmade it into these slides. The most important of
+these are
+ - sed,  shuf, split, tr
+
+ Of these, `sed` is the most powerful, and the hardest to master.
+The others have a shallow learning curve, and you can read the manpages for them
+to figure out how to use them.
+---
+#Useful Links
+
+A list of some relevant links
+
+- [List of Common Linux Commands](https://ss64.com/bash/)
+- [Linux Scripting Tutorial](https://bash.cyberciti.biz/guide/Main_Page)
+- [GNU bash Manual](https://www.gnu.org/software/bash/manual/bash.html)
+- [Introduction to Text Manipulation in Unix](https://developer.ibm.com/articles/au-unixtext/#25.Resources|outline)
+
+---
+## Exercises
+Start with some easier ones first. In the exercises, the word _command_ is means
+a structured command - you might need to use pipes or even nested commands.
+
+- Write a command that generates a permutation of the integers from 1 to 100
+in a file named `permutation100`.
+
+- Write a command that  prints the number of times that the word "lie" occurs in
+the set of all files in the current directory with a .html extension. Make it
+case insensitive.
+
+- The `ps` command displays process status information for a set of processes
+running on the local machine. With the `-ef` flags, `ps` lists the status of
+every process. Look at its output and then write a command that, when given a
+user's name, prints the number of processes currently running on that user's
+behalf. Although the slides so far have not shown the form of a script, you can
+model it from the following:
+    ```bash
+      #!/bin/bash
+      # Print the first command line argument and exit
+      echo $1
+    ```
+  The `$1` is replaced by the word typed after the script's name. For example if
+the above script is in a file named `echo1` then we would see the following:
+    ```
+      $ echo1 hello
+      hello
+    ```
+
+---
+
+## Exercises
+
+- The history command in bash displays the commands you have run recently.
+The file `~/.bash_history` stores by default the last 500 commands.
+Inspect that file and then write a command that displays the ten commands you have used the most recently.
+
+- (HARD) There is a command called `cal` that displays
+a calendar in Linux:
+    ```bash
+      $ cal
+           April 2019
+      Su Mo Tu We Th Fr Sa
+          1  2  3  4  5  6
+       7  8  9 10 11 12 13
+      14 15 16 17 18 19 20
+      21 22 23 24 25 26 27
+      28 29 30
+    ```
+  Using only `echo` and `paste`, try to display the calendar in a similar format
+for the current month. Hint: if you enclose a sequence of commands in parentheses,
+they are treated as a single command, e.g.:
+  ```bash
+    $ (echo hello; echo goodbye) | wc
+        2       2      14
+    $ echo hello; echo goodbye | wc
+     hello
+        1       1       8
+  ```
+
+
+---
+## Exercises
+- Suppose that you want to drop down the headings by one level each in a set of
+markdown files whose names end in a `.md` extension, in a directory named `documents`.
+For example, you want a heading starting with
+`#` to become a `##` heading, and a `##` heading to become a `###` heading.
+But you do not want level 4 headings to change, so `####` stays as `####`.
+
+ You are not sure whether there are spaces after the heading tag before the actual
+text. You can do any of the following:
+    1. Open a graphical editor and use its __find/replace__ feature on each and every file.
+    1. Open a command-line editor like `vi` or `vim` and use its find functionality to
+ find every occurrence and change it.
+    1. Use `vi` or `vim` to do a __global substitution__.
+    1. Use a well-designed `sed` command to do all of the replacements in a single shot.
+
+ The last alternative is clearly ther best use of your time, and you can ask `sed`
+to make a backup in case you are nervous about ruining your files.
+
+ What is the `vi` substitution that will do this?
+
+ What is the `sed` command that can do this?
+
+---
+## Exercises
+- Suppose that for stylistic reasons, you need to replace every C-style single-line comment
+in your C++ file by C++ style comments. For example, you need to
+replace
+  ```bash
+    /*  The following code finds the min element in the array */
+   ```
+by
+   ```bash
+    //  The following code finds the min element in the array
+   ```
+regardless of whether there is code to the left of the comment.
+
+ You can do any of the following:
+    1. Open a graphical editor and use its __find/replace__ feature.
+    1. Open a command-line editor like `vi` or `vim` and use its find functionality to
+     find every occurrence and change it.
+    1. Use `vi` or `vim` to do a __global substitution__.
+    1. Use a well-designed `sed` command to do all of the replacements in a single shot.
+
+ The last alternative is clearly ther best use of your time, and you can ask `sed`
+to make a backup in case you are nervous about ruining your files.
+
+ What is the `vi` substitution that will do this?
+ What is the `sed` command that can do this?
+---
+
+    </textarea>
+
+<!-- these scripts are used for redering the above as markdown -->
+     <script src="js/remark.js" type="text/javascript">
+    </script>
+    <script src="js/remark_conf.js" type="text/javascript">
+    </script>
+
+<!-- the following scripts allow Latex-like formatting -->
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <script type="text/x-mathjax-config">
+       MathJax.Hub.Config({
+         extensions: ["tex2jax.js"],
+         jax: ["input/TeX", "output/HTML-CSS"],
+         tex2jax: {
+           inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+           displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+           processEscapes: true
+         },
+         "HTML-CSS": { availableFonts: ["TeX"] }
+       });
+    </script>
+
+
+  </body>
+</html>
