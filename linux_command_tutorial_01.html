@@ -189,24 +189,21 @@ to see the starting page for the `info` system, which lists its table of content
 # Categories of Commands
 
 - There are thousands of commands.
-Following are categories with the most useful commands in each, in no
-particular order.
+Following are categories with the most useful commands in each. Some commands appear in multiple categories.
 
 - File and Directory Processing
     - `ls, more, less, cat, file, view, od, strings, pwd, basename, dirname,`
 `find, diff, cmp, touch, mv, cp, rm, rename, ln, cd , chmod, rmdir, mkdir`
 
-- Filters*
+- Filters
     -  `awk, cat, cut, grep, head, less, more, od, paste, sed, shuf, sort, split, tac, tail, tr, uniq, wc`
 
-.footnote[
-* Some filters are listed above as well.
-]
+
 - System and User Information
     - `date, domainname, du, groups, hostname, id, last, printenv, users, times, who`
 
 - Process and Job Control
-    - `bg, fg, jobs, pgrep, ps, kill, pkill, timeout, uptime, ^C, ^D, ^S, ^Q`
+    - `bg, fg, jobs, pgrep, ps, kill, pkill, timeout, uptime, ^C, ^Z, ^D, ^S, ^Q`
 
 - Miscellaneous
     - `seq, echo, yes, man, bc`
@@ -256,7 +253,7 @@ know `vi`. It can be given multiple text file names.
 by on the screen, so use it only to see small files.
 
     - `od`  - displays an "octal dump" of any file, including binaries.
-It has lots of options to make it very useful.
+It has lots of options to make it very useful. See also `objdump`.
 
     - `strings` - print the strings of printable characters in files.
 It is very useful for finding the strings in compiled code.

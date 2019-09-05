@@ -11,14 +11,14 @@
 
 class: center, middle
 
-# CSCI-UA 480.10: OSSD
+# CSCI 395.86 Open Source Software Development
 
 <br>
 
-## History
+## History of Open Source Software
 
 .author[
-Instructor: Joanna Klukowska <br>
+Stewart Weiss, derived from slides by Joanna Klukowska<br>
 ]
 
 .license[
@@ -27,109 +27,197 @@ Unless noted otherwise all content is released under [CC BY 4.0](https://creativ
 
 ---
 
-# 1950's
+## Forward
 
-- IBM starts selling hardware to the "public"
+This short set of slides is intended to give you the "big picture" and not so
+much detail.
 
-- no textbooks, no courses, no instructions available for the software that comes with the hardware - the
-__users just have to figure it out__
+The history of open source software is inseparable from the history of the Unix
+operating system. Events like the invention of the personal computer and the
+the creation of the Internet are also major factors in how and when open source
+developed.
 
-- first computer user group forms, called [__SHARE__](https://en.wikipedia.org/wiki/SHARE_(computing))
-    - August 1955, Los Angeles
-    - meeting of seventeen organizations that use 701s (IBM machine of that time)
-    - IBM encouraged users to discuss and solve problems AND to share the solutions to those problems
-    - __SHARE__ still exists today (although their purpose has changed and they are independent of IBM)
+As you will see the world of software has come full circle -- software
+started out open, got closed down for a while, and is gradually becoming ubiquitously
+open again.
+
+---
+
+## In the Beginning...
+
+- The earliest commercial computers were shipped with their _operating code_ so that
+  users could customize the code for their needs.
+
+  - There were no manuals, no instructions, no help from vendors for the shipped software -
+  __users just had to figure it all out on their own__.
+  - Code-sharing was common -
+    IBM's 704 operating system, the __GM-NAA__ I/O system, was co-written by two users: Robert Patrick of GM,
+      and Owen Mock of North American Aviation.
+--
+
+- There was a __culture of sharing__: In August 1955, the first computer user group
+  ([__SHARE__](https://en.wikipedia.org/wiki/SHARE_computing))
+   was formed.
+    - Meeting of seventeen organizations that used IBM 701s
+    - IBM encouraged users to discuss and solve problems __and__ share their solutions
 
 --
 
-- the companies's earning model: buyers paid for hardware, the software did not matter much, why?
-    - software was not-standardized &rarr; only worked on specific hardware
-    - sharing fixes and improvements to the software, made the hardware better
+- Typical hardware business model: buyers paid for hardware, the software did not matter much because
+    - software was not standardized; worked only on the purchased hardware
+    - sharing fixes and improvements to software made the hardware more valuable
 
-- there was no Internet
+--
+
+- There was no Internet:
     - widespread sharing limited by the lack of technology
     - sharing often done through the original manufacturer of the hardware
 
 ---
-# late 1950's, 1960's, 1970's
 
+## And then ...
 
+- FORTRAN was developed. It was the first high-level programming language.
+  COBOL followed shortly after.
 
-- late 1960's work on a global network begins,
-    - 1969 the first link between two universities was established
+- The economic model of selling hardware started to change:
+    - hardware was becoming standardized; the differences were in supplied software
+    - users could use software on hardware provided by other manufacturers
+    - software became a commodity - it was now for sale
+
+- During the 1960's, DARPA funded research to create communication networks
+  that would allow distant computers to communicate.
 
 --
 
-- MIT Artificial Intelligence Laboratory starts in 1959
+__In 1969__
+- The first link between two universities was established, and shortly after
+    - more universities were added and it was named the ARPANET
+    - later changed name to become the Internet
 
-- Richard Stallman joins Artificial Intelligence Lab in 1971 (as a freshman at Harvard)
-    - culture of sharing, helping each other and building on each others work
-    - centered around academic institutions, but happily sharing with industry
 
---
-
-----
-
-- development of high level programming languages (Fortran starts in 1954)
-
-- hardware standardization (over time)
-
-- the economic model of selling hardware started to change:
-    - users can use software on hardware provided by other manufacturers
-    - manufacturers made very similar hardware, the differences were in software that came with it
-    - software became sellable
+- And, Ken Thompson, Dennis Ritchie and others started working on a
+  "little-used PDP-7 in a corner"   in Bell Labs on what was to become UNIX.
+    - They invented the C programming language to help write this operating system.
+    - UNIX was written mostly in C and was portable - users just needed to modify the
+     source code for it to run on their hardware. So __source code was always shipped
+     with the executable__.
 
 ---
-# 1970's into 1980's
+## 1970's
 
-- many academic researchers hired by industry
+- A seemingly insignificant event:
+    - Richard Stallman, a student at Harvard, joined the
+      Artificial Intelligence Lab at MIT in 1971
 
-    - software they work on was protected by an exclusive license
+--
 
-- new hardware distributed without the source code for the software
+- Culture of sharing continues through the 70's.
+    - 1976: Richard Lions of University of New South Wales (Australia) annotates the
+      6th Edition Unix source code. Copies circulated throughout universities worldwide.
+    - Still in use today.
+    - It was the norm to share and build on each others work.
 
+--
 
-_In 1980, Stallman and some other hackers at the AI Lab were refused access to the source code for the software of a newly installed laser printer, the Xerox 9700. Stallman had modified the software for the Lab's previous laser printer (the XGP, Xerographic Printer), so it electronically messaged a user when the person's job was printed, and would message all logged-in users waiting for print jobs if the printer was jammed. Not being able to add these features to the new printer was a major inconvenience, as the printer was on a different floor from most of the users. This experience convinced Stallman of people's need to be able to freely modify the software they use._
+- AT&amp;T starts licensing Unix to universities and commercial firms
+   (i.e., they had to pay).
+    - No support or bug fixes because it would violate its charter as a telephone company.
+    - UC Berkeley Computer Systems Research Group (CSRG) wrote their own
+      version of Unix, named BSD, and gave it out with source code.
+--
+    - __AT&amp;T  ultimately sues Berkeley's CSRG for copyright infringement__.
 
-[From Wikipedia, https://en.wikipedia.org/wiki/Richard_Stallman, retrieved Jan. 19, 2018 ]
+--
 
+- Unix wars start as more and more versions of Unix crop up, many proprietary and
+  closed source. The Unix community is balkanized.
 
+--
 
-
+- __The era of personal computers (PCs) arrives__.
+   - Altair 8800, IBM 5100, Apple II, TRS-80, and others are marketed for home use.
+   - Almost all are shipped with proprietary,   closed code.
 
 ---
-# 1980's - GNU is born
 
-- Richard Stallman started the GNU project in 1983 (what does GNU stand for?)
+## 1980's:  Disruptive changes
 
---
+- Microsoft starts selling its operating systems for PCs.
+  - They sold only closed source, proprietary software.
+  - Tools like compilers, editors, debuggers, libraries were also closed and
+    proprietary (you had to buy them)).
 
-  - __GNU__ stands for "GNU is not Unix" (yes, it is a recursive acronym)
-
---
-
-  - _The goal of GNU was to develop a completely free and open computer operating system and body of application software,
-    in which users would never be prevented from hacking or from sharing their modifications._
-
-        [From  _Producing Open Source Software_ by Karl Fogel]
+- Apple's home computers were sold with closed source software also.
 
 --
 
-- 1985 Free Software Foundation is started by Richard Stallman to support the free software projects;
-    - GNU General Pulic Lincense (GPL) was defined by the FSF
-    - GPL says that the code may be copied and modified without restriction, and that both
+- As home computer use increases, Unix diminishes in usage outside of universities.
+
+--
+
+- Sharing source is on the demise, but __shareware__ and __freeware__ are born.
+  - Shareware was software you got for free and if  you liked it you paid for it.
+  - Freeware was software that you could use for free but those that could were asked
+    to pay if they chose.
+
+---
+
+## The Revolt
+
+- It all starts in the AI Lab at MIT in 1980. From Wikipedia, https://en.wikipedia.org/wiki/Richard_Stallman,
+retrieved Jan. 19, 2018 :
+
+  - Richard Stallman and some other hackers at the AI Lab were refused access to the
+source code for the software of a newly installed laser printer, the Xerox 9700.
+Stallman had modified the software for the Lab's previous laser printer
+(the XGP, Xerographic Printer), so it electronically messaged a user
+when the person's job was printed, and would message all logged-in
+users waiting for print jobs if the printer was jammed. Not being able
+to add these features to the new printer was a major inconvenience,
+as the printer was on a different floor from most of the users.
+This experience convinced Stallman of people's need to be able to freely modify the software they use.
+
+--
+
+- This set Stallman on a mission to found a movement that would have profound
+ effects on the world of computers.
+
+---
+## GNU and the Free Software Foundation
+
+- Stallman was so indignant that, by 1983, he announced on Usenet, that
+
+  "_Starting this Thanksgiving I am going to write a complete Unix-compatible
+  software system called GNU (for Gnu's Not Unix), and give it away
+  free to everyone who can use it._"
+
+--
+
+- "_The goal of GNU was to develop a completely free and open computer
+    operating system and body of application software,
+    in which users would never be prevented from hacking or from sharing
+    their modifications._"
+
+    [From  _Producing Open Source Software_ by Karl Fogel]
+
+--
+
+- In 1985, the __Free Software Foundation__ (FSF) was created by Richard Stallman
+  to support the free software projects;
+    - GNU General Public Lincense (GPL) was defined by the FSF
+    - The GPL says that the code may be copied and modified without restriction, and that both
     copies and derivative works (i.e., modified versions) must be distributed under the same license as the
     original, with no additional restrictions
-    - the original (ver 1) [GPL license](https://www.gnu.org/licenses/old-licenses/gpl-1.0.html)
-
+    - the original (version 1) is [GPL license](https://www.gnu.org/licenses/old-licenses/gpl-1.0.html)
 
 
 ---
 
-# 1990's
+## Early 1990's
 
-- 1991 [Linux kernel](https://en.wikipedia.org/wiki/Linux_kernel) is released by
-[Linus Torvalds](http://en.wikipedia.org/wiki/Linus_Torvalds)
+- 1991: [Linux kernel](https://en.wikipedia.org/wiki/Linux_kernel) is released by
+ [Linus Torvalds](http://en.wikipedia.org/wiki/Linus_Torvalds)
 
     - _for fun_ project to create an operating system that was an alternative to minix (different design model)
 
@@ -138,45 +226,80 @@ _In 1980, Stallman and some other hackers at the AI Lab were refused access to t
     - Torvalds asked for feedback and ideas from the community while he was working on it:
      the original post can be found here: https://groups.google.com/forum/#!original/comp.os.minix/dlNtH7RRrGA/SwRavCzVE7gJ
 
+--
 
+- 1993: RedHat was founded
+    - First company that made "free" source big business.
+    - They proved that it was possible to make money on something that is in principle free.
 
-
-
----
-
-# 1990's
-
-- 1993 RedHat is founded
-    - first company that made open source big business
-    - they proved that it is possible to make money on something that is in principle free
-
-- 1994 work begin on MySQL -
+- 1994: Work began on MySQL -
     - the largest database solution of choice
     - another example of a company making money on an open source product
 
-- 1996 Apache takes over the Web
-    - an example of an open source product that almost completely dominated the market
-    - has been consistently the most widely used web server software
+---
 
-- 1997, [Eric Raymond](http://en.wikipedia.org/wiki/Eric_S._Raymond) published
+## Late 1990's
+
+- 1996: Apache takes over the Web
+    - an example of an open source product that almost completely dominated the market.
+    - has been consistently the most widely used web server software.
+
+- 1997: [Eric Raymond](http://en.wikipedia.org/wiki/Eric_S._Raymond) published
 [The Cathedral and the Bazaar](http://www.catb.org/~esr/writings/cathedral-bazaar/cathedral-bazaar/index.html),
 a reflective analysis of the hacker community and free-software principles.
 
-- 1998, Netscape Communicator source code is released on the Internet via Mozilla.org
-
----
-# 2000's
-
-- 2002, Mozilla Firefox launches in September
-
-- 2005, `git` project launches - open source version of a commercially available distributed version control system
-
-- 2008, GitHub starts (based on git, it provides the distributed version control services)
-
-- ...
+- 1998:
+    - Netscape Communicator source code is released on the Internet via Mozilla.org
+    - Christine Peterson coined the term  "open source" to replace "free"
+    - Tom O'Reilly popularized "open source" by referring to the Freeware Summit of 1998 as the Open Source Summit.
 ---
 
-# Hacker
+## Early 2000's
+
+- From (https://www.theregister.co.uk/2001/06/02/ballmer_linux_is_a_cancer/):
+
+  "Microsoft CEO and incontinent over-stater of facts Steve Ballmer said that
+  'Linux is a cancer that attaches itself in an intellectual property sense to
+  everything it touches,' during a commercial spot masquerading as an
+  interview with the Chicago Sun-Times on June 1, 2001."
+
+- 2003: Mozilla Firefox was released.
+
+- 2003: IBM airs a TV commercial entitled "Prodigy", featuring a boy sitting
+  absorbing pearls of wisdom. Celebrities are shown making comments.
+  Harvard professor Henry Gates says, "Sharing data is the first step toward community."
+  The commercial ends with someone asking who the boy is, and being told,
+  "His name is Linux."
+
+- 2005: `Git` project launched by Linus Torvalds -
+   open source version of a commercially available distributed version control system.
+
+---
+## Late 2000's
+
+- 2008:
+   - `GitHub` started (based on `Git`, on-line distributed version control services)
+   -  `Android` released by Google,  	has become the most popular mobile platform in the world
+   - `Chromium` released by Google.
+
+- 2010:  `LibreOffice` is released; a free and open source office suite including
+   applications such as word processing, spreadsheets, drawing and database.
+
+- 2011: Microsoft survey of 1,000 software developers reveals that Git
+   is the most popular revision control system among developers.
+   [ From Wikipedia,
+    https://en.wikipedia.org/wiki/Timeline_of_free_and_open-source_software#2010s,  Retrieved September 4, 2019]
+
+- 2012 	`Google Chrome` overtakes `Internet Explorer` to become most widely
+   used web browser, according to StatCounter.
+
+- 2016:
+   - The White House released its first official federal source code policy,
+    requiring government agencies to release 20%  of any new code as open source software.
+   - Microsoft released `Chakra` as open source under MIT License; the code is available on `GitHub`.
+---
+
+## Afterthought: What is a Hacker?
 
 - Wikipedia definition: <br>
   A __computer hacker__ is any skilled computer expert that uses their technical knowledge to overcome a problem.
@@ -203,6 +326,8 @@ improvements they made to the system. As Stallman wrote later: _
 ---
 
 ## Sources and Acknowledgements
+
+- Gordon Haff, _How Open Source Ate Software_, Apress, 2018.
 
 - [Producing Open Source Software](http://producingoss.com/)  by Karl Fogel
 
