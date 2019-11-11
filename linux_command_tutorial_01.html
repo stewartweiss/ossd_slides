@@ -57,6 +57,7 @@ __bash__. The next slide set covers `bash`.
 - You are encouraged to read the many resources on the topics presented here.
 The last slide has links to the ones I think are good and concise.
 
+
 ---
 # A Bit about Shells
 
@@ -234,6 +235,48 @@ but
 cannot be written
    ```bash
     $cut -df,2 names.csv
+   ```
+---
+
+# Miscellaneous Commands
+- Among the commands that do not neatly fit into a particulara category, I included
+`echo` and `seq`.  These are both extremely useful.
+
+- The `echo` command displays the words that follow it on the command line, as in
+   ```bash
+     $ echo "The future will be better tomorrow."
+     The future will be better tomorrow.
+   ```
+It is useful because `bash` will do variable evaluation before gving the words to
+`echo`, as in
+   ```bash
+     $ echo "My username is $USER and I am using the $SHELL shell."
+     My username is stewart and I am using the /bin/bash shell.
+   ```
+
+---
+
+# Miscellaneous Commands
+
+- The `seq` command generates and prints sequences of numbers. Its general form is
+   ```bash
+    seq first increment last
+   ```
+If first or increment are omitted, they default to 1. The separator is a newline,
+but the -s option can be used to give it a different separator:
+   ```bash
+    $ seq -s ' ' 1 10
+    1 2 3 4 5 6 7 8 9 10
+   ```
+or
+   ```bash
+    $ seq -s '-' 10 2 20
+    10-12-14-16-18-20
+   ```
+or
+   ```bash
+    $ seq -s"--" 20
+    1--2--3--4--5--6--7--8--9--10--11--12--13--14--15--16--17--18--19--20
    ```
 ---
 
@@ -568,7 +611,7 @@ the streams of other processes, or other devices. This is called
 __I/O redirection__.
 
 - Attaching a file to the standard input is called __input redirection__.
-The `<` operator is the __input redirection operator__:
+The  `<`  operator is the __input redirection operator__:
 
    ```bash
     command < file
@@ -1435,7 +1478,7 @@ page is a good place to look for a comprehensive description of what it can do.
 ---
 # Filters yet to come:
 
-- Some filters have not yetmade it into these slides. The most important of
+- Some filters have not yet made it into these slides. The most important of
 these are
  - sed,  shuf, split, tr
 
@@ -1453,70 +1496,89 @@ A list of some relevant links
 - [Introduction to Text Manipulation in Unix](https://developer.ibm.com/articles/au-unixtext/#25.Resources|outline)
 
 ---
-## Exercises
-Start with some easier ones first. In the exercises, the word _command_ is means
+## Exercises 1
+Start with some easier ones first. In the exercises, the word _command_ means
 a structured command - you might need to use pipes or even nested commands.
 
-- Write a command that generates a permutation of the integers from 1 to 100
-in a file named `permutation100`.
+1. Look at the man page for the `shuf` command. Then write a command that
+generates a permutation of the integers from 1 to 100 in a file named
+`permutation100`.
 
-- Write a command that  prints the number of times that the word "lie" occurs in
-the set of all files in the current directory with a .html extension. Make it
+1. Write a command that puts the absolute path names to all C or C++ files in
+your home directory or below it in a file named `mysourcecode` in your home
+directory.
+
+1. Write a command to display the first 10 lines of every file in the current
+working directory.
+
+---
+## Exercises 2
+
+1. Write a command that  prints the number of times that the word "lie" occurs in
+the set of all files in the current directory with a `.html extension`. Make it
 case insensitive.
 
-- The `ps` command displays process status information for a set of processes
+1. This is not hard after you do a bit of rummaging through the man page for
+`grep`. Write a command that will print every line of a file preceded by its
+line number followed by a colon. For example, if the file has two lines
+   ```bash
+     All that glitters
+     is not gold.
+   ```
+then it will display
+   ```bash
+     1: All that glitters
+     2: is not gold.
+   ```
+
+
+---
+## Exercises 3
+
+1. The `ps` command displays process status information for a set of processes
 running on the local machine. With the `-ef` flags, `ps` lists the status of
-every process. Look at its output and then write a command that, when given a
+every process. Look at its output and then write a __script__ named `showprocs` that, when given a
 user's name, prints the number of processes currently running on that user's
 behalf. Although the slides so far have not shown the form of a script, you can
 model it from the following:
     ```bash
       #!/bin/bash
       # Print the first command line argument and exit
-      echo $1
+      echo $1 $1 $1
     ```
-  The `$1` is replaced by the word typed after the script's name. For example if
-the above script is in a file named `echo1` then we would see the following:
+  The first line is required in its exact form. The remaining lines that start
+with `#` are comment lines; you put them there as documentation.
+  The `$1` is a shell variable that stores the first word on the command line
+after the command itself. `$1` is replaced by the word typed after the script's
+name when the command is executed. For example if
+the above script is in a file named `echo3` then we would see the following:
     ```
-      $ echo1 hello
-      hello
+      $ echo3 hello
+      hello hello hello
     ```
+if we first make the script executable by typing `chmod +x echo3`.
 
 ---
 
-## Exercises
+## Exercises 4
 
-- The history command in bash displays the commands you have run recently.
+1. The `history` command in bash displays the commands you have run recently.
 The file `~/.bash_history` stores by default the last 500 commands.
 Inspect that file and then write a command that displays the ten commands you have used the most recently.
 
-- (HARD) There is a command called `cal` that displays
-a calendar in Linux:
-    ```bash
-      $ cal
-           April 2019
-      Su Mo Tu We Th Fr Sa
-          1  2  3  4  5  6
-       7  8  9 10 11 12 13
-      14 15 16 17 18 19 20
-      21 22 23 24 25 26 27
-      28 29 30
-    ```
-  Using only `echo` and `paste`, try to display the calendar in a similar format
-for the current month. Hint: if you enclose a sequence of commands in parentheses,
-they are treated as a single command, e.g.:
-  ```bash
-    $ (echo hello; echo goodbye) | wc
-        2       2      14
-    $ echo hello; echo goodbye | wc
-     hello
-        1       1       8
-  ```
-
-
+1. Before changing a file, it is sometimes safe to make a copy of it and tag the
+copy with today's date, as for example, by changing `README.md` to `README.md.2019.11.10`.
+Write a script named `cpdated` that could be used to make a copy with the current
+date appended to the name, so that
+   ```bash
+      cpdated myfile
+   ```
+would create `myfile.2019.11.10` if run on November 10, 2019. Don't worry about
+error checking such as whether the file exists or whether you have permission to
+create a file in the current directory.
 ---
-## Exercises
-- Suppose that you want to drop down the headings by one level each in a set of
+## Exercises 5
+1. Suppose that you want to drop down the headings by one level each in a set of
 markdown files whose names end in a `.md` extension, in a directory named `documents`.
 For example, you want a heading starting with
 `#` to become a `##` heading, and a `##` heading to become a `###` heading.
@@ -1538,8 +1600,8 @@ to make a backup in case you are nervous about ruining your files.
  What is the `sed` command that can do this?
 
 ---
-## Exercises
-- Suppose that for stylistic reasons, you need to replace every C-style single-line comment
+## Exercises 6
+1. Suppose that for stylistic reasons, you need to replace every C-style single-line comment
 in your C++ file by C++ style comments. For example, you need to
 replace
   ```bash
@@ -1564,6 +1626,33 @@ to make a backup in case you are nervous about ruining your files.
  What is the `vi` substitution that will do this?
  What is the `sed` command that can do this?
 ---
+
+## Exercises 7
+
+1. (HARD) There is a command called `cal` that displays
+a calendar in Linux:
+    ```bash
+      $ cal
+           April 2019
+      Su Mo Tu We Th Fr Sa
+          1  2  3  4  5  6
+       7  8  9 10 11 12 13
+      14 15 16 17 18 19 20
+      21 22 23 24 25 26 27
+      28 29 30
+    ```
+  Using only `echo` and `paste`, try to display the calendar in a similar format
+for the current month. Hint: if you enclose a sequence of commands in parentheses,
+they are treated as a single command, e.g.:
+  ```bash
+    $ (echo hello; echo goodbye) | wc
+        2       2      14
+    $ echo hello; echo goodbye | wc
+     hello
+        1       1       8
+  ```
+
+
 
     </textarea>
 
