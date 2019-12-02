@@ -1506,10 +1506,11 @@ generates a permutation of the integers from 1 to 100 in a file named
 
 1. Write a command that puts the absolute path names to all C or C++ files in
 your home directory or below it in a file named `mysourcecode` in your home
-directory.
+directory. THese files also include header files with a suffix of `.h`.
 
 1. Write a command to display the first 10 lines of every file in the current
-working directory.
+working directory.For simplicity, assume that the directory contains only plain
+text files.
 
 ---
 ## Exercises 2
@@ -1518,7 +1519,7 @@ working directory.
 the set of all files in the current directory with a `.html extension`. Make it
 case insensitive.
 
-1. This is not hard after you do a bit of rummaging through the man page for
+1. This one is not hard after you do a bit of rummaging through the man page for
 `grep`. Write a command that will print every line of a file preceded by its
 line number followed by a colon. For example, if the file has two lines
    ```bash
