@@ -95,6 +95,26 @@ h1, h2, h3 {
   background-color: #CABFDC;
 }
 
+.centered_80{
+    width: 80%;
+    margin:auto;
+}
+
+.centered_80_hanging p {
+    padding-left: 2em ;
+    text-indent: -2em ;
+}
+.zero_list {
+  counter-reset: zero-counter -1;
+  text-indent: -2ex;
+}
+.zero_list ol {
+    list-style: none;
+}
+.zero_list li::before {
+    counter-increment: zero-counter;
+    content: counter(zero-counter) ". " ;
+}
 
 /* Two-column layout */
 .left-column2 {
