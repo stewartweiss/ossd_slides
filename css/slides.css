@@ -4,19 +4,25 @@
 @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
 
 body {
-    font-family: 'Droid Sans', sans-serif;
+    /*font-family: 'Droid Sans', sans-serif;*/
+    font-family: "Times","Times New Roman", serif;
     margin:0;
     padding:0;
 }
 h1, h2, h3 {
-    font-family: 'Droid Sans', sans-serif;
+    /*font-family: 'Droid Sans', sans-serif;*/
     font-weight: bold;
     padding:0;
     margin:0;
 }
+h1{
+  font-size: .5em;
+}
 
 .remark-slide-content > h1:first-of-type {
-  margin-top: 0.5ex;
+  margin-top: 0.0ex;
+  padding-top:0.0px;
+  line-height: 1;
 }
 
 .author {
@@ -41,7 +47,10 @@ h1, h2, h3 {
     font-size: 70%;
 }
 
-.remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+.remark-code, .remark-inline-code {
+    font-family: 'Ubuntu Mono';
+    line-height: 1.15;
+}
 
 /*remove extra space from top of the slide*/
 .remark-slide-content {
@@ -193,7 +202,6 @@ tr:nth-child(odd), td {
     border: 1px solid #ffffff;
     background-color: #eeeeee;
 }*/
-
 .super{
    vertical-align: super;
    font-size: 70%;
