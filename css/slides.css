@@ -30,7 +30,8 @@ h1{
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
-    bottom: 3em
+    bottom: 3em;
+    font-size: 160%;
 }
 
 
