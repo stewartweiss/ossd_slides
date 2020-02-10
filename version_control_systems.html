@@ -216,6 +216,8 @@ by someone else.
 
 - __patch__
 
+--
+
    A patch is essentially like a diff except that patches are often distributed as
   chunks of code that when run, make the changes to the file to which the patch is applied.
 
@@ -251,14 +253,11 @@ by someone else.
 
 --
 
-    What happens when two people try to make different changes to the same place
-    in the code. All version control systems automatically detect conflicts
-    and notify at least one of the humans involved that their changes conflict
-   with someone else's.
-
-    Sometimes the VCS can automatically resolve the conflict, but sometimes it
-    cannot. It is then up to a human to resolve the conflict,
-   and to communicate that resolution to the version control system.
+    When the same part of a file has been modified in two different ways, a VCS
+    may not be able to merge the differences in two branches together.  The
+    changes might be within a single line, but they can also be more general than
+    that. In this case the VCS notifies a human that a merge conflict exists and
+    must be resolved manually.
 
 ---
 ## About Git
@@ -448,9 +447,11 @@ by someone else.
 
           `git push origin`
 
-        For even more clarity, you are pushing your __master branch__ and can use
+        More generally, you are pushing your __`master` branch__ to the remote
+        `origin` and can use
 
           `git push origin master`
+
 
 ---
 
