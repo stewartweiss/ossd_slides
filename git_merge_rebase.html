@@ -33,8 +33,103 @@ and released under a [Attribution 2.5 Australia (CC BY 2.5 AU)](https://creative
 
 
 ---
+## Commit Basics
 
-## Overview
+- To understand branches you must first understand what a commit object is.
+
+--
+
+- When you create a commit by running
+  ```git
+     $ git commit
+  ```
+  Git calculates a __checksum__
+  of  each subdirectory and stores various objects in the Git repository.
+  Git then creates a __commit object__ that represents the state of all files
+  in those subdirectories and it labels the commit object with the checksum.
+
+--
+
+- You can see the commit objects (but not read them) if you look at the
+  `.git/objects/`  subdirectories in the repository, where you will see files
+  whose names are those checksums.
+
+--
+
+- Each time you run `git commit`, it creates a new commit object that points to
+  the previous commit, forming a "parent list" of commits (each points to its
+  predecessor, called its parent.)
+
+- At any time, there is a most recent commit.
+
+
+---
+## Branches Explained
+
+- Now we can answer the question, "what is a `branch` in Git?"
+
+--
+    - It is nothing more than a __moveable reference__ to a commit object.
+    - Branches are names like `master`, `feature1`, and `issue32`.
+    - The first time that you make a commit, Git automatically creates a default
+      branch named `master` that points to that commit object.
+--
+    - You can see all of the branches in the `.git/refs/heads` directory in the repository.
+      They are readable files and they contain the checksums of the commits that they
+      point to.
+
+--
+
+- Every time you make a new commit, Git moves the branch forward automatically, so that it
+always points to the most recent commit. This is why it is "moveable."
+
+---
+## The HEAD Pointer
+
+- At any given time, you have what we can call a __current branch__. This is the
+  branch that is currently active. It is the one whose working directory you see
+  when you type a command such as `ls` in Unix/Linux.
+
+- Git maintains a pointer named `HEAD` that points to the current branch.
+  If you display the contents of the file HEAD you will see that it is a path to
+  the currently active branch:
+   ```bash
+     $ cat .git/HEAD
+     ref: refs/heads/master
+   ```
+- When you change to a different branch (using the `git checkout` command), Git
+ just "moves" the `HEAD` pointer to point to that branch. It also does other stuff,
+ but we will get to that soon.
+
+---
+## Creating Branches
+
+- The `git branch` command creates branches. Without arguments, it
+  lists all (local) branches in the repository:
+   ```git
+      $ git branch
+      * master
+   ```
+  The "*" tells you which branch is currently the active branch. In this case there is
+  only a `master` branch.
+
+--
+
+- To create a branch you give `git branch` the name of the branch that you want to
+ create:
+   ```git
+      $ git branch feature1
+   ```
+  It silently creates a new branch named `feature1` that points to the commit that
+  HEAD was pointing to when you issued the command.
+
+---
+
+More stuff will be here.
+
+---
+
+## Merging and Rebasing in a Nutshell
 
 - Git `merge` and Git `rebase` both integrate changes from one branch into
 another branch, but they do it in different ways.
@@ -72,9 +167,9 @@ This results in a forked history:
 
 - You can merge the master branch __into the feature branch__ as follows:
 
-    ```bash
-     git checkout feature
-     git merge master
+    ```git
+     $ git checkout feature
+     $ git merge master
     ```
  This creates a new __merge commit__ in the feature branch that combines the
 histories of both branches. Your project's branching structure now looks like this:
@@ -91,8 +186,8 @@ histories of both branches. Your project's branching structure now looks like th
 what each does, it is best to use the form from the preceding slide.
 Remember that:
 
-    ```bash
-     git merge branch
+    ```git
+     $ git merge branch
     ```
  merges the changes __from__ the branch given to the command __into the currently
 checked out branch__, not the other way around.
@@ -100,13 +195,13 @@ checked out branch__, not the other way around.
 - If you can remember the syntax, this command:
 
     ```bash
-     git merge feature master
+     $ git merge feature master
     ```
  is shorthand for
 
-    ```bash
-     git checkout feature
-     git merge master
+    ```git
+     $ git checkout feature
+     $ git merge master
     ```
  i.e., it merges the changes from master into feature.
 
@@ -164,9 +259,9 @@ to a different position in the repository's history.
 Namely, you can rebase the `feature` branch __onto__  the `master` branch using
 the following commands:
 
-    ```bash
-     git checkout feature
-     git rebase master
+    ```git
+     $ git checkout feature
+     $ git rebase master
     ```
 - This finds the common ancestor of the two branches, and then moves the entire
 `feature` branch from where it diverged from `master` to begin on the tip of the
@@ -262,9 +357,9 @@ where `branch1` was branched off of `master`.
 - When we run `git rebase` from `branch1`, Git cannot
 complete it because it found a merge conflict when trying to apply the patch for
 the commit in the current branch on top of the commit for `file3` in `master`.
-The session lloks like this:
+The session looks like this:
 
-   ```bash
+   ```git
     $ git checkout branch1
     $ git rebase master
     First, rewinding head to replay your work on top of it...
@@ -358,14 +453,14 @@ been pushed public, or it will appear that your project history disappeared.
 
 - To begin an interactive
 rebasing session, pass the `-i` option to `git rebase` command:
-    ```bash
-     git checkout feature
-     git rebase -i master
+    ```git
+     $ git checkout feature
+     $ git rebase -i master
     ```
 
  This will open a text editor listing all of the commits that are about to be
 moved:
-    ```bash
+    ```git
      pick 33d5b7a Message for commit #1
      pick 9480b3d Message for commit #2
      pick 5c67e61 Message for commit #3
@@ -384,7 +479,7 @@ look like whatever you want.
 - In this example, if the 2nd commit fixes a small problem in the 1st commit,
 you can condense them into a single commit with the `fixup` command. Using the
 text editor, replace the word `pick` with the word `fixup`:
-   ```bash
+   ```git
      pick 33d5b7a Message for commit #1
      fixup 9480b3d Message for commit #2
      pick 5c67e61 Message for commit #3
@@ -422,7 +517,7 @@ steps to use `rebase` instead.
 of course depend on what files are present in the remote. This is just an example
 with a random repository:
 
-    ```bash
+    ```git
       $ git checkout master
       Switched to branch 'master'
       $ git fetch upstream master
@@ -447,7 +542,7 @@ with a random repository:
 `master` branch. In this case there are conflicts, which must be fixed during
 the rebase:
 
-    ```bash
+    ```git
       $ git checkout feature
       Switched to branch 'feature'
       $ git rebase master
@@ -470,7 +565,7 @@ the rebase:
     ```
 - We open the `vi` editor and fix `file1` as needed, run
 
-    ```bash
+    ```git
       $ git add file1
       $ git rebase --continue
     ```
