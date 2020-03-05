@@ -33,9 +33,10 @@ and released under a [Attribution 2.5 Australia (CC BY 2.5 AU)](https://creative
 
 
 ---
-## Commit Basics
+## About Commits
 
 - To understand branches you must first understand what a commit object is.
+  What follows is a bit simplified.
 
 --
 
@@ -43,10 +44,11 @@ and released under a [Attribution 2.5 Australia (CC BY 2.5 AU)](https://creative
   ```git
      $ git commit
   ```
-  Git calculates a __checksum__
-  of  each subdirectory and stores various objects in the Git repository.
-  Git then creates a __commit object__ that represents the state of all files
-  in those subdirectories and it labels the commit object with the checksum.
+  Git creates a _snapshot_ of all currently staged content in a __commit object__.
+  It calculates a __checksum__  of  all staged subdirectories and stores
+  various objects in the Git repository. The commit object contains metadata
+  (such as your name, time of commit, and so on) and a pointer to the relevant
+  objects in the repository. It labels the commit object with the checksum.
 
 --
 
@@ -84,7 +86,7 @@ and released under a [Attribution 2.5 Australia (CC BY 2.5 AU)](https://creative
 always points to the most recent commit. This is why it is "moveable."
 
 ---
-## The HEAD Pointer
+## The `HEAD` Pointer
 
 - At any given time, you have what we can call a __current branch__. This is the
   branch that is currently active. It is the one whose working directory you see
@@ -97,9 +99,10 @@ always points to the most recent commit. This is why it is "moveable."
      $ cat .git/HEAD
      ref: refs/heads/master
    ```
-- When you change to a different branch (using the `git checkout` command), Git
- just "moves" the `HEAD` pointer to point to that branch. It also does other stuff,
- but we will get to that soon.
+- When you change to a different branch (using the `git checkout` command that
+  is explained shortly), Git
+  just "moves" the `HEAD` pointer to point to that branch. It also does other stuff,
+  but we will get to that soon.
 
 ---
 ## Creating Branches
@@ -122,6 +125,43 @@ always points to the most recent commit. This is why it is "moveable."
    ```
   It silently creates a new branch named `feature1` that points to the commit that
   HEAD was pointing to when you issued the command.
+
+---
+## Switching Branches
+
+- To change the currently active branch, use the `git checkout` command:
+  ```git
+     $ git checkout feature1
+     Switched to branch 'feature1'
+  ```
+
+--
+
+- To create a branch and immediately switch to it, you can also use the `git checkout`
+  command:
+  ```git
+     $ git checkout -b feature2
+     Switched to a new branch 'feature2'
+  ```
+
+
+---
+## Deleting Branches
+
+- To delete a branch use `git branch -d`. For example, if a repository has three
+  branches:
+   ```git
+      $ git branch
+        master
+        feature1
+      * feature2
+    ```
+  then you can use
+   ```git
+      $ git branch -d feature1
+   ```
+  to delete the `feature1` branch. You cannot delete the `feature2` branch because
+  it is currently checked out.
 
 ---
 
