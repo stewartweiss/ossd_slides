@@ -16,7 +16,7 @@ class: center, middle
 <br>
 
 ### Git Tutorial:
-### Merging and Rebasing
+### Branches, Merging, and Rebasing
 
 .author[
 Stewart Weiss <br>
@@ -36,7 +36,7 @@ and released under a [Attribution 2.5 Australia (CC BY 2.5 AU)](https://creative
 ## About Commits
 
 - To understand branches you must first understand what a commit object is.
-  What follows is a bit simplified.
+  What follows is a simplified explanation.
 
 --
 
@@ -138,7 +138,7 @@ always points to the most recent commit. This is why it is "moveable."
 --
 
 - To create a branch and immediately switch to it, you can also use the `git checkout`
-  command:
+  command with the `-b` option:
   ```git
      $ git checkout -b feature2
      Switched to a new branch 'feature2'
@@ -164,8 +164,51 @@ always points to the most recent commit. This is why it is "moveable."
   it is currently checked out.
 
 ---
+## Using Branches
 
-More stuff will be here.
+- If you have forked and cloned a project, it is a good idea to create a branch
+  before you do any work at all. Keep the master clean.
+
+- If you plan to work on an issue, say `issue 43`, then name your branch
+  `issue43` and immediately switch branches.
+
+--
+- Suppose you've worked for a while on `issue43` and now want to start working
+  on a second issue at the same time, say `issue 78`. Then __switch back to the
+  master branch__ before creating a new branch for this issue:
+   ```git
+      $ git checkout master
+      $ git checkout -b issue78
+   ```
+  If you do not switch back first, the new branch will have all of the changes
+  you made in the `issue43` branch and separating out the work later will be
+  difficult.
+
+- You can now work on `issue 78` for a while and when you want to change you can
+  easily switch to `issue 43`.
+
+---
+## Integrating Work from Different Branches
+
+- After a while you will be ready to integrate the work from one branch into
+  another.
+
+--
+
+- There are two different reasons for this.
+
+--
+   - In one case, you are convinced that
+     the work in your topic or feature branch is ready to be incorporated into the
+     main branch of the project.
+
+   - In the other case, changes have been made in the main branch that you need
+     to incorporate into your topic branch, lest it fall behind.
+
+--
+- These different cases require different workflows. In the first case you want
+  to __incorporate your topic branch into the main branch__. In the second case you
+  want to __incorporate the main branch into the topic branch__.
 
 ---
 
@@ -245,6 +288,90 @@ checked out branch__, not the other way around.
     ```
  i.e., it merges the changes from master into feature.
 
+---
+## Merge Conflicts
+
+- Sometimes you end up with changes in the two different branches that you
+  want to merge that Git cannot automatically resolve. This is the case, for
+  example, when a file with the same name in two different branches has lines
+  at the same position in the file that are different in the two files.
+
+- In this case merging fails and Git gives you instructions on how to fix it.
+  The next slide demonstrates.
+
+---
+
+## A Merge Conflict Example
+
+- The following sequence of commands creates and updates a repository with an
+  inherent merge conflict.
+
+   ```bash
+      $ git init
+      $ echo "My first file" > file1 ; git add file1
+      $ git commit . -m "Added file1 to empty repository"
+      $ echo "My second file" > file2 ; git add file2
+      $ git commit . -m "Added file2 "
+      $ git checkout -b branch1
+      $ echo "My third file" >  file3 ; git add file3
+      $ git commit . -m "Updated file3"
+      $ git checkout master
+      $ echo "My fourth file (only in master)" > file4 ; git add .
+      $ git commit . -m "Added file4 to master"
+      $ echo "My better version of the third file." >  file3 ; git add file3
+      $ git commit . -m "Created file3 in master."
+   ```
+ At this point `file3` has a different first line in   `master`
+from that of the `file3` in `branch1`. This particular difference
+cannot be resolved by Git's merge strategies.  The history is forked because
+the `master` branch was updated with a new commit after the commit
+where `branch1` was branched off of `master`.
+
+---
+## Trying to Merge
+
+- When you try to merge the `master` branch into `branch1`
+   ```git
+      $ git checkout branch1
+      $ git merge master
+   ```
+   Git will display the following message:
+     ```
+       Auto-merging file3
+       CONFLICT (add/add): Merge conflict in file3
+       Automatic merge failed; fix conflicts and then commit the result.
+     ```
+
+--
+   Git now expects you to edit the file with the conflict, stage it, and
+   commit it, as is shown next.
+
+---
+## Fixing the Merge Conflict
+
+- To remove a merge conflict, in general the steps are:
+
+    1. Edit the file(s) that have the conflicts to remove the conflict. To do
+       this, open any editor and find the lines that Git marks
+       as conflicting content. In our case it looks like this:
+    ```
+       <<<<<<< HEAD
+       This is the third file.
+       =======
+       My better version of the third file.
+       >>>>>>> master
+    ```
+--
+    1. Remove Git's marking lines and change the content so that it is not
+      identical to what it is in the branch you are rebasing. Save the file.
+
+--
+    1. Stage the file and commit it. In this case we would stage `file3`:
+    ```git
+       git add file3
+       git commit -m "Resolved conflist in file3" file3
+    ```
+      That is all. The merge takes place after this.
 
 ---
 ## Merging in the Workflow
@@ -272,7 +399,7 @@ become "polluted" with these merge commits<span class="super">1</span>.
 This can make it hard for others to understand the history of the project.
 
 .footnote[
-1 There are ways to use `git log` to clean the history up a bit, but this is
+1 There are ways to use `git log` to clean the history up a bit, but this
 does not really solve the problem.
 ]
 
@@ -365,7 +492,8 @@ conflict is manually resolved.
 ---
 ## A Rebasing Conflict Example
 
-- Suppose that the following sequence of commands creates and updates a repository.
+- We can create a repository with a conflict using the same sequence of
+  commands from the "Merge Conflicts" slide earlier: It is repeated here.
 
    ```bash
       $ git init
@@ -374,21 +502,16 @@ conflict is manually resolved.
       $ echo "My second file" > file2 ; git add file2
       $ git commit . -m "Added file2 "
       $ git checkout -b branch1
-      $ echo "My third file" >|  file3 ; git add file3
+      $ echo "My third file" >  file3 ; git add file3
       $ git commit . -m "Updated file3"
-      $ echo "New file in branch1" > file4 ; git add file4
-      $ git commit . -m "Added file4 to this branch"
       $ git checkout master
-      $ echo "new file in master" > file5 ; git add .
-      $ git commit . -m "Added file5 to master"
-      $ echo "My latest third file" >|  file3 ; git add file3
-      $ git commit . -m "Updated file3"
+      $ echo "My fourth file (only in master)" > file4 ; git add .
+      $ git commit . -m "Added file4 to master"
+      $ echo "My better version of the third file." >  file3 ; git add file3
+      $ git commit . -m "Created file3 in master."
    ```
- At this point `file3` has a different first line in   `master`
-from that of the `file3` in `branch1`. This particular difference
-cannot be resolved by Git's merge strategies.  The history is forked because
-the `master` branch was updated with a new commit after the commit
-where `branch1` was branched off of `master`.
+ Once again,  `file3` has a different first line in   `master`
+from that of the `file3` in `branch1`.
 
 
 ---
@@ -402,22 +525,53 @@ The session looks like this:
    ```git
     $ git checkout branch1
     $ git rebase master
-    First, rewinding head to replay your work on top of it...
-    Applying: updated file3
-    Using index info to reconstruct a base tree...
-    M	file3
-    Falling back to patching base and 3-way merge...
-    Auto-merging file3
-    CONFLICT (content): Merge conflict in file3
-    error: Failed to merge in the changes.
-    Patch failed at 0006 updated file3
-    Use 'git am --show-current-patch' to see the failed patch
+      First, rewinding head to replay your work on top of it...
+      Applying: Updated file3
+      Using index info to reconstruct a base tree...
+      Falling back to patching base and 3-way merge...
+      Auto-merging file3
+      CONFLICT (add/add): Merge conflict in file3
+      error: Failed to merge in the changes.
+      Patch failed at 0001 Updated file3
+      Use 'git am --show-current-patch' to see the failed patch
 
-    Resolve all conflicts manually, mark them as resolved with
-    "git add/rm <conflicted_files>", then run "git rebase --continue".
-    You can instead skip this commit: run "git rebase --skip".
-    To abort and get back to the state before "git rebase", run "git rebase --abort".
+      Resolve all conflicts manually, mark them as resolved with
+      "git add/rm <conflicted_files>", then run "git rebase --continue".
+      You can instead skip this commit: run "git rebase --skip".
+      To abort and get back to the state before "git rebase", run "git rebase --abort".
    ```
+---
+## Fixing the Conflict
+
+- Git gives you instructions for what to do when it cannot automatically
+resolve a rebase conflict. The steps are different than they are when resolving
+a merge conflict.  In general the steps are:
+
+    1. Edit the file(s) that have the conflicts to remove the conflict. To do
+       this, open any editor and find the lines that Git marks
+       as conflicting content. In our case it looks like this:
+    ```
+      <<<<<<< HEAD
+       My better version of the third file.
+      =======
+       My third file
+      >>>>>>> branch1
+    ```
+--
+    1. Remove Git's marking lines and change the content so that it is not
+      identical to what it is in the branch you are rebasing. Save the file.
+--
+
+    1. Stage the file again. In this case we would stage `file3`:
+    ```git
+       git add file3
+    ```
+--
+    1. In a rebasing conflict we do not run `git commit`. We just tell Git to
+       continue rebasing:
+    ```git
+       git rebase --continue
+    ```
 
 ---
 ## Rebasing Issues
@@ -614,7 +768,16 @@ the rebase:
 
 ---
 
-## Summary
+##  Summary
+
+- It is critical to use branches to separate the different tasks on which you
+  are working.
+
+- This implies that you need to know how to manage branches: create them,
+  view them, delete them, switch between them and so on.
+
+- It also implies that you need to know how to integrate the changes from
+  one branch into another, and there are two options: merging and rebasing.
 
 - These are the important things to know to start rebasing your branches.
 
@@ -627,6 +790,8 @@ use `git merge`.
 
 - Either option is perfectly valid,
 but at least now you have the option of leveraging the benefits of `git rebase`.
+
+
 
     </textarea>
 
