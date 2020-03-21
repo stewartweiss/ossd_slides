@@ -265,8 +265,8 @@ histories of both branches. Your project's branching structure now looks like th
 ---
 ## Merging
 
-- There are many forms of the `merge` command, and unless you memorize
-what each does, it is best to use the form from the preceding slide.
+- There are many options for the `merge` command, and unless you memorize
+what each does, it is best to use the simplest form from the preceding slide.
 Remember that:
 
     ```git
@@ -275,18 +275,16 @@ Remember that:
  merges the changes __from__ the branch given to the command __into the currently
 checked out branch__, not the other way around.
 
-- If you can remember the syntax, this command:
+- You may occasionally see  multiple branches supplied to the `git merge`
+command, as in
 
     ```bash
-     $ git merge feature master
+     $ git merge branch1 branch2
     ```
- is shorthand for
+ This tells git to merge branches `branch1` and `branch2` into the current branch,
+ whatever it is.
 
-    ```git
-     $ git checkout feature
-     $ git merge master
-    ```
- i.e., it merges the changes from master into feature.
+- __Remember that `git merge` always merges the named branch into the current branch.__
 
 ---
 ## Merge Conflicts
