@@ -74,21 +74,28 @@ shows the URL associated with the remote. For example, if we cloned the reposito
    `https://github.com/stewartweiss/devel.git`
 
   to the local machine we will see
-   ```bash
+   ```git
      $ git remote -v
      origin	https://github.com/stewartweiss/devel.git (fetch)
      origin	https://github.com/stewartweiss/devel.git (push)
    ```
+---
+## Adding a Second Remote
+
 - To add a new remote, use `git remote add` specifying the handle name and the
 URL:
-   ```bash
+   ```git
     $ git remote add remote-repo https://github.com/stewartweiss/devel-newfeature.git
+   ```
+
+- We can look at out remotes again to verify that the new remote is there:
+   ```git
     $ git remote -v
     origin	https://github.com/stewartweiss/devel.git (fetch)
     origin	https://github.com/stewartweiss/devel.git (push)
     remote-repo	https://github.com/stewartweiss/devel-newfeature.git (fetch)
     remote-repo	https://github.com/stewartweiss/devel-newfeature.git (push)
-```
+    ```
 ---
 ## Remote Branches
 - Remember that a branch is just a __reference__ to a commit object. Internally,
@@ -107,9 +114,13 @@ You can get a full list of remote references explicitly with
 ]
 .below-column2[
 ]
+
+---
+## Remote-Tracking Branches
+
 - __Remote-tracking branches__ are __local__ branches. They are references to
 the state of remote branches. They are like constant pointers - you cannot move
-them. Only  Git can move them for you whenever you do any network communication,
+them. Only  Git can move them for you, which it does  whenever you do any network communication,
 to make sure they accurately represent the state of the remote repository.
 
 - The purpose of a remote-tracking branch is to remember the last known
@@ -178,7 +189,7 @@ refs are stored as files in the `.git/refs/remotes/` directory.
 
 - To list the remote branches,  use the `-r` flag to `git branch`.
 If we do this in the repository that we cloned earlier, `devel.git`, we see
-   ```bash
+   ```git
     $ git branch -r
        origin/feature1
        origin/master
@@ -188,6 +199,48 @@ If we do this in the repository that we cloned earlier, `devel.git`, we see
 because we have not fetched that data yet. When we do, this command will display
 more information.
 
+---
+## About Cloned Repositories
+
+- You have used the `git clone` command to make an exact copy of a remote repository
+many times by now, and you probably think you understand it completely. Perhaps
+you do. But maybe not.
+
+- The documentation states that `git clone`
+   "_copies a repository into a newly
+created directory, creates remote-tracking branches for each branch in the
+cloned repository (visible using `git branch --remotes`), and **creates and
+checks out an initial branch that is forked from the cloned repository’s
+currently active branch**._" (emphasis mine)
+
+- This means that when you clone a repository that has multiple branches,
+after you clone it and `cd` into its working directory, if you enter the
+`git branch` command all you will see is the `master` branch, nothing else.
+Try it!
+
+- For example, within the `devel` repository that  I cloned earlier, I view
+the remote branches and the local branches and this is what I see:
+   ```git
+     $ git branch -r
+       origin/feature1
+       origin/master
+     $ git branch
+       * master
+   ```
+---
+## About Cloned Repositories (2)
+
+- Git does not actually create a branch locally until you actually need it.
+To prove this we now checkout the `feature1` branch even though it is not a
+local branch yet:
+   ```git
+     $ git checkout feature1
+      Branch 'feature1' set up to track remote branch 'feature1' from 'origin'.
+      Switched to a new branch 'feature1'
+     $ git branch
+     * feature1
+       master
+   ```
 ---
 ## About Fetching and Pulling
 - The `git fetch` command downloads commits, files, and refs from a
@@ -249,26 +302,25 @@ and examine.
 ### 1. Inspect the Remote First
 - We will fetch a remote branch and update our local working state to the
 remote contents, using  the example from previous slides.
-
-- The local repository
-was cloned from the `devel.git` repo on GitHub, and a remote named
+The local repository was cloned from the `devel.git` repo on GitHub, and a remote named
 `remote-repo` was added that maps to
 
  `https://github.com/stewartweiss/devel-newfeature.git`
 
+
 - First we inspect the `remote-repo` repository with  `git remote show`:
-   ```bash
-    $ git remote show remote-repo
-    * remote remote-repo
-      Fetch URL: https://github.com/stewartweiss/devel-newfeature.git
-      Push  URL: https://github.com/stewartweiss/devel-newfeature.git
-      HEAD branch: master
-      Remote branches:
-        exploratory new (next fetch will store in remotes/remote-repo)
-        feature2    new (next fetch will store in remotes/remote-repo)
-        master      new (next fetch will store in remotes/remote-repo)
-      Local ref configured for 'git push':
-        master pushes to master (local out of date)
+   ```git
+     $ git remote show remote-repo
+     * remote remote-repo
+       Fetch URL: https://github.com/stewartweiss/devel-newfeature.git
+       Push  URL: https://github.com/stewartweiss/devel-newfeature.git
+       HEAD branch: master
+       Remote branches:
+         exploratory new (next fetch will store in remotes/remote-repo)
+         feature2    new (next fetch will store in remotes/remote-repo)
+         master      new (next fetch will store in remotes/remote-repo)
+       Local ref configured for 'git push':
+         master pushes to master (local out of date)
    ```
  Notice that `master` is configured to push to this repo's `master` branch.
 If we were to fetch this remote's data, `master` would track its `master`
@@ -280,18 +332,18 @@ branch.
 - We  also inspect the `origin` remote before continuing, and notice the
 difference:
    ```bash
-    $ git remote show origin
-    * remote origin
-      Fetch URL: https://github.com/stewartweiss/devel.git
-      Push  URL: https://github.com/stewartweiss/devel.git
-      HEAD branch: master
-      Remote branches:
-        feature1 tracked
-        master   tracked
-      Local branch configured for 'git pull':
-        master merges with remote master
-      Local ref configured for 'git push':
-        master pushes to master (up to date)
+     $ git remote show origin
+     * remote origin
+       Fetch URL: https://github.com/stewartweiss/devel.git
+       Push  URL: https://github.com/stewartweiss/devel.git
+       HEAD branch: master
+       Remote branches:
+         feature1 tracked
+         master   tracked
+       Local branch configured for 'git pull':
+         master merges with remote master
+       Local ref configured for 'git push':
+         master pushes to master (up to date)
    ```
  Here it shows that the two branches in `origin` are being tracked (locally).
 This is because we pulled that data down already and Git set up the local branches
@@ -301,7 +353,7 @@ to track the remote's branches.
 ## Examining  a Remote Branch:
 ### 3. Fetch the Selected Branch
 - We fetch the `feature2` branch from `remote-repo`:
-   ```bash
+   ```git
     $ git fetch remote-repo feature2
     warning: no common commits
     remote: Enumerating objects: 27, done.
@@ -321,7 +373,7 @@ The important output is that Git ultimately creates a remote-tracking branch
 ### 4. Check Out the Branch
 
 - Next we check out this branch:
-   ```bash
+   ```git
     $ git checkout remote-repo/feature2
     Note: checking out 'remote-repo/feature2'.
 
@@ -363,16 +415,20 @@ new local branch from that ref using the suggestion in the output:
     $ git checkout -b feature2 remote-repo/feature2
      Switched to a new branch 'feature2'
   ```
-- This creates a new local branch named `feature2` and updates HEAD to point to
+- This creates a new local branch named `feature2` and updates `HEAD` to point to
 the latest remote content, allowing us to continue development on it from this point.
 
 - Checking out a local branch from a remote-tracking branch automatically
 creates what is called a __tracking branch__, and the branch that it tracks is
 called an __upstream branch__.
 
+---
+## Examining  a Remote Branch:
+### 5. About Tracking Branches
+
 - Tracking branches are local branches that have a direct relationship to a
 remote branch. If you are on a tracking branch and type `git pull`, Git
-automatically knows which server to fetch from and branch to merge into.
+automatically knows which server to fetch from and which branch to merge.
 
 - A command equivalent to the above uses the `--track` option:
    ```bash
@@ -388,7 +444,7 @@ fetch the remote branch, check it out, and set up a local tracking branch for it
 Git will update the local state and there is no need to do a merge.
 
 - This is an alternative workflow:
- ```bash
+ ```git
    $ git checkout -b feature2
    Switched to a new branch 'feature2'
    $ git fetch remote-repo feature2
