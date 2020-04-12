@@ -4,13 +4,12 @@
 @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
 
 body {
-    /*font-family: 'Droid Sans', sans-serif;*/
-    font-family: "Times","Times New Roman", serif;
+    font-family: 'Droid Sans', sans-serif;
     margin:0;
     padding:0;
 }
 h1, h2, h3 {
-    /*font-family: 'Droid Sans', sans-serif;*/
+    font-family: 'Droid Sans', sans-serif;
     font-weight: bold;
     padding:0;
     margin:0;
@@ -62,6 +61,7 @@ h1{
 .small { font-size: 70%; }
 .smaller { font-size: 85%; }
 .big { font-size: 140%; }
+.bigger {font-size: 160%; }
 .large { font-size: 200%; }
 .huge { font-size: 300%; }
 .code{font-family: 'Ubuntu Mono'; }
@@ -83,10 +83,32 @@ h1{
 .blue{
     color: #0000DD;
 }
+.bluebold{
+    color: #0000DD;
+    font-weight: bold;
+}
+
+.red{
+    color: #dc143c;
+}
+.redbold{
+    color: #dc143c;
+    font-weight: bold;
+}
+
+.green{
+    color: #008000;
+}
+.greenbold{
+    color: #008000;
+    font-weight: bold;
+}
 
 .section {
     background-color: #CABFDC;
-    padding: 5em;
+    border-style: solid;
+    border-color: #999; border-width:5px;
+    padding: 2.5em;
 }
 
 /* code output formatting */
@@ -98,12 +120,23 @@ h1{
 }
 
 /* code output formatting */
-.box {
+.box2 {
   margin: 0 0.5em 0 0.5em;
   padding: 0.5em;
   border-style: solid; font-size: 70%; border-color: #AAA; border-width:3px;
   background-color: #CABFDC;
 }
+
+/* box formatting */
+.box {
+  font-size: 120%;
+  margin: 0 0.5em 0 0.5em;
+  padding: 0.5em;
+  border-style: solid;
+  border-color: #AAA; border-width:3px;
+  background-color: #AADDFF;
+}
+
 
 .centered_80{
     width: 80%;
@@ -205,5 +238,10 @@ tr:nth-child(odd), td {
 }*/
 .super{
    vertical-align: super;
+   font-size: 70%;
+ }
+
+.sub{
+   vertical-align: sub;
    font-size: 70%;
  }
