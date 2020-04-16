@@ -92,7 +92,7 @@ h1{
     color: #dc143c;
 }
 .redbold{
-    color: #dc143c;
+    color: #E81B1B;
     font-weight: bold;
 }
 
@@ -176,6 +176,22 @@ padding:1% 1% 1% 5%;
   clear: both;
 }
 
+/* Two-column layout */
+.left-column2-bigright {
+width: 20%;
+float: left;
+padding:1% 5% 1% 1%;
+}
+
+.right-column2-bigright {
+width: 68%;
+float: right;
+padding:1% 1% 1% 5%;
+}
+
+.below-column2 {
+  clear: both;
+}
 
 
 

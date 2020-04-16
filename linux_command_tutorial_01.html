@@ -29,130 +29,417 @@ Unless noted otherwise all content is released under a
  [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
 ]
 
+---
+name: toc
+## Contents
+
+[Overview](#overview)
 
 ---
+name: overview
+## Overview
 
-# Overview
 
-- There are many different Unix operating systems. __Linux__ is one of them.
-Other popular forms of Unix include BSD variants such as FreeBSD, proprietary
-versions such as IBM's AIX and Oracle's Solaris, and Android.
+- There are many different Unix operating systems. .redbold[Linux].super[1] is one of them.
+Other popular forms of Unix include BSD variants such as .redbold[FreeBSD], proprietary
+versions such as IBM's .redbold[AIX] and Oracle's .redbold[Solaris],
+and .redbold[Android].
 
 - Most of what is in these slides is true of all "flavors" of UNIX, but some of
-it is only true of Linux.
+it is only true of what is commonly called .redbold[GNU/Linux], which is an operating
+system consisting of a Linux kernel with
+a very rich and powerful set of tools that integrate into it, developed by the
+.redbold[GNU Project] with the support of the .redbold[Free Software Foundation] .super[2].
+
+
+
+
+
+.footnote[
+1. Technically, Linux is the name of the .bluebold[kernel], the core of the operating
+system that is always memory-resident.
+
+2. The GNU Project calls GNU/Linux the .redbold[GNU Operating System].
+]
 
 - There is too much to cover about working in the Unix command-line in a short slide
 presentation.
 
 - These slides cover many topics, none in great depth. But they are designed to
-cover the most important aspects of working in the _UNIX programming environment_.
-
-- Working in the command-line really means two things:
-    - using Unix __commands__ and
-    - using the __shell__.
-
-- These slides focus on commands primarily and just a bit about the most common Linux shell,
-__bash__. The next slide set covers `bash`.
-
-- You are encouraged to read the many resources on the topics presented here.
-The last slide has links to the ones I think are good and concise.
-
+cover the most important aspects of working in the .greenbold[UNIX programming environment].
 
 ---
-# A Bit about Shells
+name: shell_vs_commands
+## The Shell versus the Commands
 
-- You need to know a bit about shells before you can type any commands in Unix,
+- Working in the command-line really means doing two different things:
+  - using the  .greenbold[shell]
+  - entering Unix  .greenbold[commands]
+
+- You cannot enter any commands without using the shell, so you have to know
+something about using a shell program, such as `bash`.
+
+- But knowing `bash` and nothing more is pretty useless, because the purpose of
+using `bash` is to make it easy to do your work, which almost always involves
+executing commands.
+
+- These slides begin with light coverage of `bash`,
+the most common Linux shell.super[1], but primarily focus on Linux commands.
+A different set of slides  covers `bash` scripting.
+
+- You are encouraged to read the many resources on the topics presented here.
+The last slide has links to the ones which, I think, are good and concise.
+
+.footnote[
+1. Other common open source shells include the .redbold[C shell] (`csh`),
+the .redbold[Bourne shell] (`sh`), and the .redbold[T C shell] (`tcsh`).
+]
+
+---
+name: about_shells
+## A Bit about Shells
+
+- You need to know a bit about shells before you can enter any commands in Unix,
 so we begin with the very basics.
 
-- A __shell__ is an interactive command-line interpreter for the operating
+- A .bluebold[shell] is an interactive command-line interpreter for the operating
 system, but it is also  a programming language.
 
-- A __command-line interpreter__ is a program that displays a prompt
+- A .bluebold[command-line interpreter] is a program that displays a prompt
 (such as '$') and  waits for you to type a command.
-When you type the command followed by a _newline_ character, it "executes"
+When you type the command followed by a .greenbold[newline] character, it "executes"
 that command and then redisplays the prompt and starts this cycle all over again.
 
-- Example:
-   ```bash
+- Example Using the `whoami` command:
+  ```bash
      $ whoami
      stewart
-   ```
-    - `whoami` is an unusual command - it displays your username just in case
-you forgot.
+  ```
+  `whoami` is an unusual command - it displays your username (just in case
+you forgot.)
 
-- The prompt can be customized in many ways*. On the system in which I have
+
+- The prompt can be customized in many ways.super[1]. On the system in which I have
 prepared these slides, whose name is `harpo`, my prompt is
    ```bash
     [stewart@harpo slides]$
    ```
 
 .footnote[
-The PS1 shell variable in `bash` controls the first level prompt string.
+1. The PS1 shell variable in `bash` controls the .greenbold[first level prompt string].
 ]
+
+---
+name: command_navigation
+## Command Navigation
+
+- Modern shells, including `bash`,  have a .greenbold[history mechanism] that
+saves the sequence of your most recent commands in a file and that allows you
+to recall and execute previous commands.super[1].
+
+- The up and down arrow keys on the keyboard let you navigate this history:
+  - up-arrow displays the command before the current one,
+  - down-arrow displays the command after the current one.
+
+--
+
+- __Example__.
+
+    I enter the following three commands, the last two of which are
+just gibberish:
+  ```bash
+      [stewart@harpo ~]$ printenv HISTSIZE
+      500
+      [stewart@harpo ~]$ nonsense
+      nonsense: command not found
+      [stewart@harpo ~]$ whatsup
+      whatsup: command not found
+      [stewart@harpo ~]$
+
+  ```
+
+--
+  If, in the current state, I press the up-arrow key 3 times, I can re-execute
+the command `printenv HISTSIZE`.
+
+.footnote[
+1. History is a bit complicated, but roughly, the default is 500 previous commands
+are saved in persistent storage.
+]
+
+---
+name: command_editing
+## Command Editing
+- Modern shells, including `bash`,  have a .greenbold[command editing] that
+allows you to use the left-arrow and right-arrow keys to move the cursor in the
+current command and then modify it by inserting or removing characters.
+
+- __Example__.
+  I first type the following command but DO NOT press the .greenbold[ ENTER ]
+key (henceforth called .greenbold[newline]):
+  ```bash
+      [stewart@harpo ~]$ printenv HISTSIZE
+  ```
+--
+
+  I now move my cursor so that it is where the vertical bar is here:
+  ```bash
+      [stewart@harpo ~]$ printenv HIST|SIZE
+  ```
+  and type the word `FILE`, delete the letters `SIZE` and do not yet enter newline:
+  ```bash
+      [stewart@harpo ~]$ printenv HISTFILE
+  ```
+--
+  When I enter the newline this is what I see:
+  ```bash
+      [stewart@harpo ~]$ printenv HISTFILE
+      /home/stewart/.bash_history
+  ```
 
 
 ---
-# Command Introduction
-
+name: command_intro
+## Introduction to Commands
 
 - Unix commands are the tools that you use to get things done in Unix. You type
-their names at the shell prompt, and they do their magic.
+their .greenbold[names] at the shell prompt, and they do their magic.
 
-- Examples
+- __Examples__.
    ```bash
     $ date
     Thu Mar 28 11:22:45 EDT 2019
-    $ echo "Hello world. Code responsibly!"
-    Hello world. Code responsibly!
-    $ wc  css/slides.css
-    167  332 2661 css/slides.css
+    $ echo "Hello world. I try to code responsibly!"
+    Hello world. I try to code responsibly!
+    $ wc ./README
+    72  464 2677 ./README
+
    ```
 
     - The `date` command displays the current time and date;
     - `echo` displays the strings that follow it on the command-line;
     - `wc` is short for __w__ord __c__ount; it displays the number of lines,
-words, and characters in the file(s) whose names follow it on the command-line.
+  words, and characters in the file(s) whose names follow it on the command-line.
 
 ---
+name: file_system
+## Files and Directories
 
-# Files and Directories
+- Files reside in a large tree called the .greenbold[directory hierarchy].
+Each  has  an  .greenbold[absolute pathname], which is a string that defines the  path
+from the root of the tree (which is called `/`) to the file.
 
-- Files reside in a large tree called the __directory hierarchy__.
-Each  has  a  __pathname__  describing  the  path  from the root of the tree
-(which is called /) to the file.
+- A .bluebold[directory] is a special type of file that contains a table with
+a row for each file in it, and a reference that can be used to
+find the actual file on the system's storage devices.super[1].
 
-- A directory is just a special type of file that contains a table with file
-names and a way to find the actual files on the system's storage devices.
 
-- There are two special directories: the __home directory__, and the
-__current working directory__. The home directory is the one you see when you
-login to the Unix system. The current working directory is the one you are
-"currently in".
+.left-column2-bigright[
+    <img src="img/filesystem.png" height=360 style="float:center;" >
+]
+.right-column2-bigright[
+The absolute pathname of the `README` file in the representation of
+part of a file system
+to the left is
+```bash
+   /data/biocs/b/student.accounts/cs395.86/scratch/README
+```
 
-- The home directory has the abbreviation `~` and the current  directory
-has the abbreviation  `.` ( a period).
+The absolute pathname to the directory `cs395.86` in this same
+file system is
+```bash
+   /data/biocs/b/student.accounts/cs395.86
+```
+]
 
-- The `ls` command displays the contents of a directory:
+
+.footnote[
+1. Or if it is not a "real" file, then wherever the file is located.
+]
+---
+name: home_dir
+## Special Directories: The Home Directory
+
+- The shell maintains two special directories for you:
+the .greenbold[home directory],
+and the .greenbold[current working directory].
+
+- The .bluebold[home directory] is the one whose contents you see when you first open
+a terminal window or when you first login to the Unix system.
+
+- It is an abstraction that represents the place where all your personal stuff
+is supposed to be kept, like your home. Not in the street or some other public
+place!
+
+- Your home directory can be referred to by the special notation `~`.
+The home directory of a user whose name is `severus` would have the shorthand
+name `~severus`.
+
+---
+name: working_dir
+## The Current Working Directory
+
+- When you are working in a shell, at any moment in time you have a
+unique, special directory called your .greenbold[current working directory]
+or your .greenbold[present working directory].
+
+- In these slides,  we call it simply the .greenbold[current directory].
+
+--
+
+- The current directory is where you "are" in the file system at the moment, i.e.,
+the directory that you feel like you are currently "in".
+
+--
+
+- The `pwd` command displays the absolute pathname of your current
+directory:
+```bash
+   [stewart@harpo ~]$ pwd
+   /home/stewart
+```
+
+- A single period `.` is a shorthand notation that represents the
+current working  directory.
+
+--
+- The shell keeps track of your current directory as you move about the file
+system in a special variable it maintains, named `PWD`. You can use `printenv`
+to see its current value:
+
+```bash
+   [stewart@harpo ~]$ printenv PWD
+   /home/stewart
+```
+
+
+---
+name: many_shells
+## Working in Multiple Terminals
+
+- If you have two terminal windows open, you are running two copies of the shell
+and each copy will have its own squirreled away copy of the `PWD` variable.super[1].
+
+- The two commands below were run in two different terminal windows open at the
+same time:
+
+.left-column2[
+```bash
+[stewart@harpo cs395.86]$ printenv PWD
+/home/stewart/hunter/cs395.86
+```
+]
+.right-column2[
+
+```bash
+[stewart@harpo cs340]$ printenv PWD
+/home/stewart/hunter/cs340
+```
+]
+.below-column2[
+- The `pwd` command would show the same output.
+
+]
+
+.footnote[
+1. This should suggest to you that each shell stores its variables in memory,
+not in a file. But Linux has a virtual file system named `/proc`
+that lets you see the memory where they are stored.
+]
+---
+name: listing_dirs
+## Listing Directory Contents
+
+- The `ls` command displays the contents of one or more directories. To see the
+contents of the current directory, just type `ls`:
    ```bash
-    $ls .
-    bash_tutorial.html css  img js
+     [sweiss@cslab12 cs395.86]$ ls
+     .:
+     bin  data  demos  scratch  temp
+      [sweiss@cslab12 cs395.86]$ ls .
    ```
-- As  a convenience, files in the current directory can be named by their last
-component. That is why a file like `/home/stewart/notes` can be abbreviated to
-`notes` when my current directory is `/home/stewart`.
+- The `ls` command is covered later.
 
 ---
-# Types of Commands
+name: filenames
+## About File names
 
-- Every Unix __command__ is either an executable file, or a command that is built
+- If you are new to Unix, you need to know some important facts:
+
+   - File names are case sensitive: `temp` and `Temp` are different names.
+
+   - File names that begin with a period `.` are not displayed by `ls` and
+     therefore act like "hidden" files
+
+   - File names should not contain spaces: use underscores to separate words,
+     as in `school_records` or `source_downloads`.
+
+   - File names can contain most other characters, but convention is to use
+     `_`, `-`, `.`, and letters and digits (for good reasons.)
+
+   - In the shell, file name extensions are meaningless for the most part.
+     Some programs, such as compilers, use them, but shell commands ignore them.
+---
+name: pathnames
+## Relative Pathnames
+
+- In addition to absolute pathnames, all files and directories can be referred
+to by .greenbold[relative pathnames].
+
+- Whereas absolute pathnames always start with the slash `/`,
+a .bluebold[relative pathname]  is a path that is relative to the current
+working directory .greenbold[and does not start with `/`].
+
+- In addition to the period, which is the current working directory,
+all shells define the special notation consisting of two periods `..` to
+represent the .greenbold[parent directory]
+of the current directory, which is the directory that contains it.
+
+- Example
+   - The pathname `./scratch/README` is a relative path from
+     ```bash
+       /data/biocs/b/student.accounts/cs395.86
+     ```
+     to the file whose absolute pathname is
+     ```bash
+       /data/biocs/b/student.accounts/cs395.86/scratch/README
+    ```
+---
+name: navigating_dirs
+## Navigating Directories
+
+- The `cd` command (think " .redbold[c]hange  .redbold[d]irectory " ) changes
+your current directory. You give it the name of a directory, either as an
+absolute pathname or as a relative pathname.
+
+- __Examples__.
+  ```bash
+     $ pwd
+     /data/biocs/b/cshome/sweiss
+     $ cd /data/biocs/b/student.accounts/cs395.86/
+     $ pwd
+     /data/biocs/b/student.accounts/cs395.86
+     $ cd ~/hunter
+     $ pwd
+     /data/biocs/b/cshome/sweiss/hunter
+     $ cd ../../cs395.86
+     $ pwd
+     /data/biocs/b/student.accounts/cs395.86
+  ```
+---
+
+--name: command_types
+## Types of Commands
+
+- Every Unix command is either an executable file, or a command that is built
 into a shell (or sometimes both!)
     - Commands like `ls` and `date` are executable binaries.
-    - Commands like `cd` and `bg` are usually __shell built-ins__;
-they are implemented within the shell program itself.
+    - Commands like `cd` and `bg` are usually .bluebold[shell built-ins], which are
+command that are implemented within the shell program itself.
     - Commands like `pwd` and `echo` are both shell built-ins and executable files.
 
-- If a command is an executable, the `which` command will display the (absolute)
-pathname of that executable:
+- If a command is an executable file, the `which` command will display the absolute
+pathname of the executable file:
    ```bash
     $which ls
     /bin/ls
@@ -164,7 +451,8 @@ pathname of that executable:
     cal is /usr/bin/cal
    ```
 ---
-# Getting Help
+name: getting_help
+## Getting Help
 
 - Of course you can do browser searches for help; on commands, but it is easier
 to use the resources found right on your machine.
@@ -187,35 +475,44 @@ brings up the man page (short for manual page) for `ls`.
 to see the starting page for the `info` system, which lists its table of contents.
 
 ---
-# Categories of Commands
+name: command_categories
+## Categories of Commands
 
 - There are thousands of commands.
-Following are categories with the most useful commands in each. Some commands appear in multiple categories.
+The next two slides list categories with the most useful commands in each.
+Some commands appear in multiple categories.
 
-- File and Directory Processing
-    - `ls, more, less, cat, file, view, od, strings, pwd, basename, dirname,`
-`find, diff, cmp, touch, mv, cp, rm, rename, ln, cd , chmod, rmdir, mkdir`
+- File and Directory Processing:
+    - `ls, more, less, cat, file, view, od, strings, pwd, basename, dirname, `
+   `realpath, find, diff, cmp, touch, mv, cp, rm, rename, ln, cd, chgrp, chmod, mkdir, rmdir, stat`
 
 - Filters
-    -  `awk, cat, cut, grep, head, less, more, od, paste, sed, shuf, sort, split, tac, tail, tr, uniq, wc`
+    -  `awk, cat, cut, grep, egrep, fgrep, head, join, less, more, od, paste, sed, shuf, sort,`
+    `split, tac, tail, tee, tr, uniq, wc`
 
 
 - System and User Information
-    - `date, domainname, du, groups, hostname, id, last, printenv, users, times, who`
+    - `date, domainname, du, free, groups, hostname, id, last, printenv, uptime,  users, times, who`
 
 - Process and Job Control
-    - `bg, fg, jobs, pgrep, ps, kill, pkill, timeout, uptime, ^C, ^Z, ^D, ^S, ^Q`
-
-- Miscellaneous
-    - `seq, echo, yes, man, bc`
+    - `bg, fg, jobs, pgrep, ps, kill, pkill, timeout, ^C, ^Z, ^D, ^S, ^Q`
 
 ---
-# General Command Syntax
+name: misc_commands
+## More Miscellaneous Commands
+
+- These are hard to categorize but useful
+
+    - `bc, echo, false, man, seq, sleep, stty, true, tty, yes`
+
+---
+name:cmmd_syntax
+##  Command Syntax
 - In general, commands may have options and arguments. The general form is
    ```bash
      commandname  [options]  arguments
    ```
-where square brackets [] mean that the thing enclosed in them is optional.
+where square brackets `[ ]` mean that the thing enclosed in them is optional.
 
 - Options begin with a hyphen `-`. Multiple options are usually allowed.
 For most commands, if the option does not require an argument of its own, it may be
@@ -237,8 +534,8 @@ cannot be written
     $cut -df,2 names.csv
    ```
 ---
-
-# Miscellaneous Commands
+name: misc_commands
+## Miscellaneous Commands
 - Among the commands that do not neatly fit into a particulara category, I included
 `echo` and `seq`.  These are both extremely useful.
 
@@ -247,7 +544,7 @@ cannot be written
      $ echo "The future will be better tomorrow."
      The future will be better tomorrow.
    ```
-It is useful because `bash` will do variable evaluation before gving the words to
+It is useful because `bash` will do variable evaluation before giving the words to
 `echo`, as in
    ```bash
      $ echo "My username is $USER and I am using the $SHELL shell."
@@ -255,8 +552,8 @@ It is useful because `bash` will do variable evaluation before gving the words t
    ```
 
 ---
-
-# Miscellaneous Commands
+name: misc_commands2
+## Miscellaneous Commands
 
 - The `seq` command generates and prints sequences of numbers. Its general form is
    ```bash
@@ -280,7 +577,7 @@ or
    ```
 ---
 
-# Viewing Files
+## Viewing Files
 - Many of the commands to view the contents of files are simple to use. Some
 are intended for text files only, others any type of file. Because they are easy,
 no examples are given. Look up the syntax and options in the man pages.
@@ -301,7 +598,7 @@ It has lots of options to make it very useful. See also `objdump`.
     - `strings` - print the strings of printable characters in files.
 It is very useful for finding the strings in compiled code.
 ---
-# `ls`
+## `ls`
 
 - This lists information about files and directories
 - Syntax:
@@ -327,7 +624,7 @@ If no files are given it lists information about the current directory.
     $ls -atulF
    ```
 ---
-# `basename`
+## `basename`
 
 - `basename` strips leading directory path and suffix from filenames
 
@@ -352,7 +649,7 @@ If no files are given it lists information about the current directory.
 
 
 ---
-# `dirname`
+## `dirname`
 
 -  `dirname` strips the filename from a pathname, leaving the directory path.
 
@@ -378,7 +675,7 @@ If no files are given it lists information about the current directory.
    ```
 
 ---
-# `find`
+## `find`
 
 - Its man page states, "search for files in a directory hierarchy", but this is
 an understatement. It is one of the most powerful commands available in Unix.
@@ -407,7 +704,7 @@ is equivalent to
    ```
 
 ---
-#  `find`
+##  `find`
 ###  finding by file name
 
 - Finding (printing paths to) all files in the directory `dir` whose name ends in `.cpp`:
@@ -443,7 +740,7 @@ and  `-iname "*.jpeg"`.
 If either is true then the filename passes the test.
 
 ---
-# `find`
+## `find`
 ### finding by time stamp
 
 - Unix timestamps files with three stamps: time of last access, time of last
@@ -475,7 +772,7 @@ __Lesson__: -mmin expects an argument in minutes. The `-` in front of 180 means 
    ```
 
 ---
-# `find`
+## `find`
 ### finding by other properties
 
 - In Unix, properties such as size, type, permissions,  user ownership, group
@@ -503,7 +800,7 @@ The letter after the number can be `c`, `w`, `k`, `M`, or `G`. Guess what they s
 __Lesson__: `-a` is the logical AND-operator
 
 ---
-# `find`
+## `find`
 ### finding by other properties
 
 - Finding files in `dir` for which people other than the owner and the group
@@ -526,7 +823,7 @@ and no one else has access of any kind:
 To find directories, replace `f` with `d`.
 
 ---
-# `find`
+## `find`
 ### taking actions when files are found
 
 - You can use add __actions__ to expressions. These actions can be applied to
@@ -554,8 +851,8 @@ if you make a mistake):
    ```
 
 ---
-
-# Streams, Files, and Redirection
+name: streams
+## Streams, Files, and Redirection
 
 - A __stream__ is a flow of bytes into or out of a running process. In Unix, a stream is
 implemented with a data structure that includes buffers to store the bytes and
@@ -611,15 +908,18 @@ the streams of other processes, or other devices. This is called
 __I/O redirection__.
 
 - Attaching a file to the standard input is called __input redirection__.
-The  `<`  operator is the __input redirection operator__:
+The  `<`  <!-- > -->
+operator is the __input redirection operator__:
 
    ```bash
     command < file
    ```
+<!-- > -->
 Example:
    ```bash
     cat < file1
    ```
+<!-- > -->
 The contents of file1 are redirected to the standard  input of the `cat` command,
 which is not very useful, but illustrates the idea.
 
@@ -651,12 +951,14 @@ Suppose `file1`  contains the sequence of arithmetic expressions
     12 ^ 2
    ```
 --
-Run the command `bc < file1` at the command prompt:
+Run the command `bc < file1` <!-- > -->
+at the command prompt:
    ```bash
     $ bc < file1
     10
     144
    ```
+<!-- > -->
 This shows that file1 replaced `bc`'s standard input.
 ---
 # Redirection
@@ -1100,7 +1402,7 @@ because `grep` was used instead of `egrep`.
 ### Character Classes
 
 - The period __`.`__ matches any single character.
-
+<!-- [ [ -->
 
  ` ` | ` `
 :--- |:---
@@ -1662,6 +1964,8 @@ they are treated as a single command, e.g.:
     </script>
     <script src="js/remark_conf.js" type="text/javascript">
     </script>
+
+
 
 <!-- the following scripts allow Latex-like formatting -->
     <script type="text/javascript" async
