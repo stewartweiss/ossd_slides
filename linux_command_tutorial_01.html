@@ -31,8 +31,99 @@ Unless noted otherwise all content is released under a
 
 ---
 name: toc
-## Contents
+### Table of Contents
 
+[Overview](#overview)<br>
+[The Shell versus the Commands](#shell_vs_commands)<br>
+[A Bit about Shells](#about_shells)<br>
+[Command Navigation](#command_navigation)<br>
+[Command Editing](#command_editing)<br>
+[Introduction to Commands](#command_intro)<br>
+[Files and Directories](#file_system)<br>
+[Special Directories: The Home Directory](#home_dir)<br>
+[The Current Working Directory](#working_dir)<br>
+[Working in Multiple Terminals](#many_shells)<br>
+[Listing Directory Contents](#listing_dirs)<br>
+[About File names](#filenames)<br>
+[Relative Pathnames](#pathnames)<br>
+[Navigating Directories](#navigating_dirs)<br>
+[Types of Commands](#command_types)<br>
+[Learning About Commands](#learning_commands)<br>
+[Getting Help: The Manual Pages](#man_pages)<br>
+[Searching Through Man Pages](#man_page_searching)<br>
+[The Info System](#info)<br>
+[Help for  Shell Builtins](#bash_help)<br>
+[Categories of Commands](#command_categories)<br>
+[More Commands](#misc_commands)<br>
+---
+### Table of Contents
+
+[Command Syntax](#cmmd_syntax)<br>
+[Simple Command Syntax](#cmmd_syntax2)<br>
+[Complex Command Syntax](#cmmd_syntax3)<br>
+[Miscellaneous Commands](#misc_commands)<br>
+[Miscellaneous Commands](#misc_commands2)<br>
+[The Power of I/O Redirection](#redirection_power)<br>
+[Streams, Files, and Redirection](#streams)<br>
+[File Descriptors and Streams](#file_descriptors)<br>
+[I/O Redirection](#io_redirection)<br>
+[Input Redirection](#input_redirection)<br>
+[Output Redirection](#output_redirection)<br>
+[Error Redirection](#error_redirection)<br>
+[Redirection Examples](#redirection_examples)<br>
+[Appending](#appending)<br>
+[Pipes](#pipes)<br>
+[Viewing Files](#viewing_files)<br>
+[`ls`](#ls)<br>
+[`basename`](#basename)<br>
+[`dirname`](#dirname)<br>
+[`find`](#find)<br>
+[finding by file name](#find_by_name)<br>
+[finding by time stamp](#find_by_time)<br>
+[finding by other properties](#find_misc)<br>
+[finding by other properties](#find_misc2)<br>
+---
+### Table of Contents
+
+[taking actions when files are found](#find_actions)<br>
+[Filter Introduction](#filter_intro)<br>
+[Filter Synopsis](#filter_synopsis)<br>
+[`cat` and  `tac`](#cat_tac)<br>
+[`head` and `tail`](#head_tail)<br>
+[`sort`](#sorting)<br>
+[`sort` Examples (1)](#sort_examples1)<br>
+[`sort` Examples (2)](#sort_examples2)<br>
+[`uniq`](#uniq)<br>
+[Combining Filters](#combining_filters)<br>
+[Filters: `grep`, `egrep`, and `fgrep`](#grep_family)<br>
+[Regular Expression Rules](#regex1)<br>
+[Regular Expression Rules (2)](#regex2)<br>
+[Regular Expression Character Classes](#regex3)<br>
+[Regular Expression Character Classes (2)](#regex4)<br>
+[Regular Expressions: Anchors](#anchors)<br>
+[Regular Expressions: Backreferences](#backreferences)<br>
+[Filters: `cut` and `paste`](#cut_paste1)<br>
+[Filters: `cut` and `paste` (2)](#cut_paste2)<br>
+[Filters: `cut` and `paste` (3)](#cut_paste3)<br>
+[`awk`](#awk1)<br>
+[`awk` (2)](#awk2)<br>
+[`awk` (3)](#awk3)<br>
+[`awk` (4)](#awk4)<br>
+---
+### Table of Contents
+
+[`awk` (5)](#awk5)<br>
+[`awk` (6)](#awk6)<br>
+[`awk` (7)](#awk7)<br>
+[Filters yet to come:](#more_filters)<br>
+[Useful Links](#links)<br>
+[Exercises 1](#exercise1)<br>
+[Exercises 2](#exercise2)<br>
+[Exercises 3](#exercise3)<br>
+[Exercises 4](#exercise4)<br>
+[Exercises 5](#exercise5)<br>
+[Exercises 6](#exercise6)<br>
+[Exercises 7](#exercise7)<br>
 
 ---
 name: overview
@@ -427,85 +518,234 @@ absolute pathname or as a relative pathname.
   ```
 ---
 
---name: command_types
+name: command_types
 ## Types of Commands
 
-- Every Unix command is either an executable file, or a command that is built
-into a shell (or sometimes both!)
-    - Commands like `ls` and `date` are executable binaries.
-    - Commands like `cd` and `bg` are usually .bluebold[shell built-ins], which are
-command that are implemented within the shell program itself.
-    - Commands like `pwd` and `echo` are both shell built-ins and executable files.
+- Every Unix command can be any of the following:
+  1. an executable file (either binary or in a scriptnig language)
+  1. a command that is built into the shell
+  1. an .greenbold[alias]
+  1. a .greenbold[shell script] that is in your .greenbold[environment]
 
-- If a command is an executable file, the `which` command will display the absolute
-pathname of the executable file:
+  Sometimes they can be more than one of these.
+
+-  __Examples__
+
+  - Commands like `ls` and `who` are executable binaries. `ls` is the file
+    `/bin/ls` and `who` is the file `/usr/bin/who`.
+
+  - Commands like `cd` and `bg` are usually .bluebold[shell built-ins],
+    which are commands that are implemented within the shell program itself.
+
+  - Commands like `pwd` and `echo` are .greenbold[both shell built-ins and executable files].
+
+---
+name: learning_commands
+## Learning About Commands
+
+- The `type` command (which is a shell built-in) displays the type(s) of its arguments:
    ```bash
-    $which ls
-    /bin/ls
-   ```
-- The `type` command (which is built-in) displays the type(s) of its arguments:
-   ```bash
-    $type pwd cal
+    $ type pwd cal
     pwd is a shell builtin
     cal is /usr/bin/cal
+    $ type type
+    type is a shell builtin
+    $ type rm
+    rm is aliased to `rm -i'
    ```
+  Although `type` says that `rm` is an alias, it is also the executable `/bin/rm`.
+
+
+- If a command is an executable file, the `which` command will display the absolute
+pathname of the executable file that you will run when you type its name.super[1]:
+   ```bash
+    $ which ls
+    /bin/ls
+   ```
+
+  The `which` command only displays output for commands that are files, not builtins:
+  it
+  ```bash
+   $ which bg
+   $
+  ```
+
+.footnote[
+1 Sometimes a command has multiple versions. This shows the one you will use.
+]
 ---
-name: getting_help
-## Getting Help
+name: man_pages
+## Getting Help: The Manual Pages
 
-- Of course you can do browser searches for help; on commands, but it is easier
-to use the resources found right on your machine.
+- These days many people start looking for help on using a particular command
+by doing a search in their browser, but there are resources found right on your
+machine to get help while you are working,
+.greenbold[_and they do not require an internet connection_].
 
-- The `man` command is the first thing to try. `man` is short for __man__ual.
+- If you know the name of the command but do not know how to use it,
+the `man` command is the first thing to try. `man` is short for .redbold[man]ual.
 
 - To access the __manual page__ for a command, type `man` followed by the
-command name. E.g.,
+command name. For example, the "man page" for `ls` is displayed by
 
    ```bash
-    $man ls
+    $ man ls
    ```
-brings up the man page (short for manual page) for `ls`.
+- To get a one-line summary of every version of a command use `whatis`:
 
-- There is also the `info` command, which works for those commands that have
-`info` pages. Not all pages do. Type
    ```bash
-    $info
+    $ whatis who
+    who (1)              - show who is logged on
+    who (1posix)         - display who is on the system
+
    ```
+
+
+---
+name: man_page_searching
+## Searching Through Man Pages
+
+- If you do not know the name of a command, there are two types of keyword
+searches you can try:
+`man -k <search term>`  and `apropos <search term>`. The output below is
+truncated.
+```bash
+   $ man -k "text editor"
+   ed (1)               - line-oriented text editor
+   ex (1)               - Vi IMproved, a programmer's text editor
+   gedit (1)            - text editor for the GNOME Desktop
+   vi (1)               - Vi IMproved, a programmer's text editor
+   vim (1)              - Vi IMproved, a programmer's text editor
+   xedit (1)            - simple text editor for X
+```
+- Usually the volume of results is very large and you will want to
+.greenbold[filter] them. .greenbold[Filters] are covered later, but one simple
+thing you can do is to .greenbold[pipe the output through `more`].super[1]:
+
+  ```bash
+     $ apropos filter | more
+      apgbfm (1)           - APG Bloom filter management program
+      bcomps (1)           - biconnected components filter for graphs
+      bf_compact (1)       - shell script to compact a bogofilter directory
+      bf_compact-bdb (1)   - shell script to compact a bogofilter directory
+      bf_copy (1)          - shell script to copy a bogofilter working directory
+      bf_copy-bdb (1)      - shell script to copy a bogofilter working directory
+      bf_tar (1)           - shell script to write a tar file of a bogofilter directory to stdout
+      ...
+  ```
+
+
+.footnote[
+1 To learn more about pipes, go to  [Pipes](#pipes)
+]
+
+
+---
+name: info
+## The Info System
+
+- The GNU Project provides an alternative to the man pages for their programs,
+called the .bluebold[info system]. Only GNU commands have an `info` page.
+Type
+```bash
+    $ info
+```
 to see the starting page for the `info` system, which lists its table of contents.
+
+- The `info` pages are .greenbold[hyper-linked into a tree-like structure].
+Pages that describe commands are called .bluebold[nodes].
+The navigation system  uses commands to move around the nodes,
+such as `p` for previous node, `n` for the next node,
+and so on.
+
+- To learn how to use it, read the very first page that is brought up with the
+`info` command:
+
+  ```bash
+  File: dir,      Node: Top,      This is the top of the INFO tree.
+
+  This is the Info main menu (aka directory node).
+  A few useful Info commands:
+
+    'q' quits;
+    'H' lists all Info commands;
+    'h' starts the Info tutorial;
+    'mTexinfo RET' visits the Texinfo manual, etc.
+     ...
+  ```
+
+---
+name: bash_help
+##  Help for  Shell Builtins
+
+- Man pages do not provide help for using shell builtins, unless you are
+willing to read the 4356-line man page for `bash` itself and search for the
+specific help on that builtin.
+
+- But `bash` has a (builtin) command named `help` that provides help on all
+shell builtins. You do not need to give it the exact name - you can give it the
+first few letters and it will display help for all commands starting with
+those letters:
+
+```bash
+    $ help help
+    help: help [-dms] [pattern ...]
+        Display information about builtin commands.
+
+        Displays brief summaries of builtin commands.  If PATTERN is
+        specified, gives detailed help on all commands matching PATTERN,
+        otherwise the list of help topics is printed.
+
+        Options:
+          -d	output short description for each topic
+          -m	display usage in pseudo-manpage format
+          -s	output only a short usage synopsis for each topic matching
+            PATTERN
+
+        Arguments:
+          PATTERN	Pattern specifiying a help topic
+
+        Exit Status:
+        Returns success unless PATTERN is not found or an invalid option is given.
+
+```
 
 ---
 name: command_categories
 ## Categories of Commands
 
-- There are thousands of commands.
-The next two slides list categories with the most useful commands in each.
-Some commands appear in multiple categories.
+- There are thousands of commands in a typical Linux system.
+This slide and the next one list categories with the most useful commands in each.
+Some commands appear in multiple categories. This list generally excludes
+utility programs such as compilers and other programming tools.
 
 - File and Directory Processing:
-    - `ls, more, less, cat, file, view, od, objdump, strings, pwd, basename, dirname, `
-   `realpath, find, diff, cmp, touch, mv, cp, rm, rename, ln, cd, chgrp, chmod, mkdir, rmdir, stat`
+    - `basename, cat, cd, chgrp, chmod, cmp, cp, diff, dirname, file,`
+      `find, less, ln, ls, mkdir, more, mv, objdump, od, pwd, realpath,`
+      `rename, rm, rmdir, stat, strings, touch, view`
 
 - Filters
     -  `awk, cat, cut, grep, egrep, fgrep, head, join, less, more, od, paste, sed, shuf, sort,`
     `split, tac, tail, tee, tr, uniq, wc`
 
-
 - System and User Information
-    - `date, domainname, du, free, groups, hostname, id, last, printenv, uptime,  users, times, who`
+    - `date, domainname, du, free, groups, hostname, id, last, printenv, uptime,`
+       `  users, times, which, who, whoami, w`
 
-- Process and Job Control
-    - `bg, fg, jobs, pgrep, ps, kill, pkill, timeout, ^C, ^Z, ^D, ^S, ^Q`
 
 ---
 name: misc_commands
-## More Miscellaneous Commands
+## More Commands
 
-- These are hard to categorize but useful
+- Process and Job Control
+    - `bg, fg, jobs, kill, pkill, pgrep, ps, script, timeout, ^C, ^Z, ^D, ^S, ^Q`
 
-    - `bc, echo, false, man, seq, sleep, stty, true, tty, yes`
+- These commands are hard to categorize but either important or useful:
+
+    - `bc, echo, false, help, info, man, seq, shuf, sleep, stty, true, tty, yes`
 
 ---
-name:cmmd_syntax
+name: cmmd_syntax
 ##  Command Syntax
 - In general, commands may have options and arguments. The general form is
    ```bash
@@ -513,41 +753,85 @@ name:cmmd_syntax
    ```
 where square brackets `[ ]` mean that the thing enclosed in them is optional.
 
-- Options begin with a hyphen `-`. Multiple options are usually allowed.
-For most commands, if the option does not require an argument of its own, it may be
-combined with other options using a single hyphen. E.g.:
+- __Example__. The man page for the `which` command shows the synopsis
 
    ```bash
-    $ls -a -l  ~
+    SYNOPSIS
+          which [-a] filename ...
    ```
-can be written
+
+  In this case there is just a single optional `-a` and the command allows
+multiple filename arguments, indicated by the ellipsis, `...`.
+
+- Options begin with a hyphen `-`. Multiple options are usually allowed.
+For most commands, if the option does not require an argument of its own, it may be
+combined with other options using a single hyphen.
+
+
+---
+name: cmmd_syntax2
+## Simple Command Syntax
+- Commands can have single-letter options, options that are words, and options
+that have required arguments. The `zip` command, which creates compressed archives,
+is a good example. (Part of the synopsis is removed to simplify this.)
+
    ```bash
-    $ls -al ~
+SYNOPSIS
+       zip  [-aABcdDeEfFghjklLmoqrRSTuvVwXyz!@$] [--longoption ...]  [-b path]
+       [-n suffixes] [-t date] [-tt date] [zipfile [file ...]]
    ```
-but
+- All single-letter options can be  listed as a single string preceded by a hyphen
+ or separately in any order:
+
    ```bash
-    $cut -d, -f2 names.csv
+    $ zip -rcC myzipfile mydirectory
    ```
-cannot be written
+
    ```bash
-    $cut -df,2 names.csv
+    $ zip -r -c -C  myzipfile mydirectory
+   ```
+- Some options require arguments. The synopsis indicates this by listing it
+separately. The `-t` option for `zip`, for example, requires a date.
+   ```bash
+    [-t date]
+   ```
+  The man page shows what forms a date can be.
+---
+name: cmmd_syntax3
+## Complex Command Syntax
+
+- When  some options require arguments and others do not, the ones with arguments
+must be specified separately. It usually does not matter what order the  options
+are, though some man pages will state otherwise. Both of these do the same thing:
+
+   ```bash
+    $ zip -rt 1991-12-07 infamy foo
+    $ zip t 1991-12-07  -r  infamy foo
+   ```
+   They both  add all the files in `foo` and its subdirectories  that  were
+last  modified  on  or after December 7, 1991, to the zip archive
+`infamy.zip`.
+
+   But this command cannot be written like this:
+   ```bash
+    $ zip -tr 1991-12-07 infamy foo
    ```
 ---
 name: misc_commands
 ## Miscellaneous Commands
-- Among the commands that do not neatly fit into a particulara category, I included
-`echo` and `seq`.  These are both extremely useful.
+- Among the commands that do not neatly fit into a particular category, I included
+`echo` and `seq`.  These are both very  useful and will be used for several examples.
 
 - The `echo` command displays the words that follow it on the command line, as in
    ```bash
-     $ echo "The future will be better tomorrow."
-     The future will be better tomorrow.
+     $ echo "Dan Quaye once said, 'The future will be better tomorrow.'"
+     Dan Quaye once said, 'The future will be better tomorrow.'
    ```
-It is useful because `bash` will do variable evaluation before giving the words to
+It is useful because `bash` will do .greenbold[variable evaluation] before giving the words to
 `echo`, as in
    ```bash
-     $ echo "My username is $USER and I am using the $SHELL shell."
-     My username is stewart and I am using the /bin/bash shell.
+     echo "My screen has $COLUMNS columns right now."
+     My screen has 80 columns right now.
    ```
 
 ---
@@ -574,283 +858,33 @@ or
     $ seq -s"--" 20
     1--2--3--4--5--6--7--8--9--10--11--12--13--14--15--16--17--18--19--20
    ```
----
-
-## Viewing Files
-- Many of the commands to view the contents of files are simple to use. Some
-are intended for text files only, others any type of file. Because they are easy,
-no examples are given. Look up the syntax and options in the man pages.
-
-- All are used by following the command name with a list of files. They include:
-
-    - `more`  and `less`  -  display a screenful at a time of the given text files
-
-    - `view` -  brings up the `vi` editor in read-only mode. Use it only if you
-know `vi`. It can be given multiple text file names.
-
-    - `cat` -  "__c__oncatenates __a__nd __p__rints" its list of text file arguments. It whizzes
-by on the screen, so use it only to see small files.
-
-    - `od`  - displays an "octal dump" of any file, including binaries.
-It has lots of options to make it very useful. See also `objdump`.
-
-    - `objdump`  - displays information about one or more object files.  The
-options control what particular information to display.
-
-    - `strings` - print the strings of printable characters in files.
-It is very useful for finding the strings in compiled code.
----
-## `ls`
-
-- This lists information about files and directories
-- Syntax:
-   ```bash
-    ls [option]... [file]...
-   ```
-If no files are given it lists information about the current directory.
-- Some very useful options:
-   ```bash
-       -l    - produce a "long" listing
-       -a    - show all files, including hidden ones
-       -F    - append trailing character to classify type
-       -t    - sort by time of last modification, most recent first
-       -R    - recursively list subdirectories
-   ```
-- Examples
-    - list all files in current directory with most recent first, classifying
-   ```bash
-    $ls -atlF
-   ```
-    - list all files sorted by access time
-   ```bash
-    $ls -atulF
-   ```
----
-## `basename`
-
-- `basename` strips leading directory path and suffix from filenames
-
-- Syntax:
-   ```bash
-    basename pathname [suffix]
-   ```
-   outputs `pathname` with the leading path removed and, if it has a suffix matching `suffix`
-   with that removed also.
-
-- Examples:
-   ```bash
-    basename /usr/bin/sort
-              -> sort
-    basename include/stdio.h .h
-              -> stdio
-    basename include/stdio.h .foo
-              -> stdio.h   # i.e., suffix does not match
-    basename ~/hunter/cs395.86_s19/blogs/stewart-weekly  -weekly
-              -> stewart
-   ```
-
 
 ---
-## `dirname`
+name: redirection_power
+## The Power of I/O Redirection
 
--  `dirname` strips the filename from a pathname, leaving the directory path.
+- One of the brilliant inventions of Unix is .greenbold[I/O redirection].
+To get just a small taste of its power, run a few of these commands,
+all of which use the .greenbold[pipe] redirection operator:
 
-- Syntax:
-   ```bash
-    dirname pathname [pathname] ...
+  1. Generate a random string of length 32:
+  ```bash
+     $ cat /dev/urandom | tr -dc 'a-zA-Z _&%$#0-9-' | fold -w 32 | head -1
+  ```
+  1. Generate a sorted list of user names of people who have logged into the
+  system recently:
+  ```bash
+    $ last -w | sort -k1 | awk '{print $1}' | uniq | grep -Ev 'wtmp|root'
    ```
-   outputs each pathname with its last non-slash component and trailing slashes
-       removed.
-
-
-- Examples:
+  1. New York State maintains an open data set of Covid testing by date and county.
+The following command prints a line for each date showing the number of new positive
+test cases in the given county, sorted by increasing number of cases:
    ```bash
-    dirname /usr/bin/sort
-              -> /usr/bin
-    dirname /usr/bin/gcc /usr/lib/gcc /usr/share/man/man1/gcc.1.gz
-              ->
-                /usr/bin
-                /usr/lib
-                /usr/share/man/man1
-    dirname ~/hunter/cs395.86_s19/blogs/stewart-weekly
-              -> /home/stewart/hunter/cs395.86_s19/blogs
+    $ awk -F, '($2 == "Queens")\
+     { printf "New positive Covid cases in Queens on %s is %d\n",$1,$3}' \
+        New_York_State_Statewide_COVID-19_Testing.csv | sort -n -k10
    ```
-
----
-## `find`
-
-- Its man page states, "search for files in a directory hierarchy", but this is
-an understatement. It is one of the most powerful commands available in Unix.
-
-- The `find` command allows you to apply commands and actions to all files matching
-a set of search criteria in one or more subtrees of the Unix file system.
-
-- Simplified syntax (some options suppressed):
-   ```bash
-       find  [starting-point...]  [expression]
-   ```
-
-- `starting-points` are the directories to act as the roots of the hierarchies to search.
-- `expression` describes what is to be searched for; it includes search criteria as
-well as actions to perform.
-
-- With no expression, `find` displays every file in the trees rooted at the `starting-points`.
-The default action is `-print`
-
-   ```bash
-    find . -print
-   ```
-is equivalent to
-   ```bash
-    find .
-   ```
-
----
-##  `find`
-###  finding by file name
-
-- Finding (printing paths to) all files in the directory `dir` whose name ends in `.cpp`:
-   ```bash
-    find dir -name "*.cpp"
-   ```
-__Lesson__: The `*` is a shell wildcard that matches 0 or more characters, including the
-period if it is the first character in the name.
-
-- Finding all files in `dir` whose name is exactly `main.cpp`
-   ```bash
-    find dir -name "main.cpp"
-   ```
---
-
-- Finding all files in `dir` whose name ends in any of `.jpg`, `.JPG`, `.JPg`, etc:
-   ```bash
-    find dir -iname "*.jpg"
-   ```
-__Lesson__: `-iname` is a case-insensitive version of `-name`.
-
---
-
-- Finding all files in `dir` whose name ends in any of `.jpg`, `.JPG`, `.jpeg`, `.JPEG`, etc:
-   ```bash
-    find dir -iname "*.jpg"  -o -iname "*.jpeg"
-   ```
-__Lesson__: Expressions return `true` or `false`.
-`-iname` is a __test__ applied to each file as it is found. If the filename matches,
-it returns `true` otherwise `false`.
-The `-o` is a logical OR-operator; its operands above are `-iname "*.jpg"`
-and  `-iname "*.jpeg"`.
-If either is true then the filename passes the test.
-
----
-## `find`
-### finding by time stamp
-
-- Unix timestamps files with three stamps: time of last access, time of last
-modification, and time of last change of status (file properties).
-
-- Finding files in `dir` that have been __modified__ within the past 3 hours:
-   ```bash
-    find dir -mmin -180
-   ```
-__Lesson__: -mmin expects an argument in minutes. The `-` in front of 180 means "less than".
-
---
-
-- Finding files in `dir` that have been modified more than 3 hours ago:
-   ```bash
-    find dir -mmin +180
-   ```
---
-
-- Finding files in `dir` that have been __accessed__ (use `-amin`) exactly 3 hours ago:
-   ```bash
-    find dir -amin 180
-   ```
---
-
-- Finding files in `dir` whose __status changed__ (use `-cmin`) within the past 8 hours:
-   ```bash
-    find dir -cmin -480
-   ```
-
----
-## `find`
-### finding by other properties
-
-- In Unix, properties such as size, type, permissions,  user ownership, group
-ownership, and more, are stored in a special structure called an __inode__. `find`
-can test any of these properties.
-
-- Finding files in `dir` larger than 500 Kilobytes (1024 bytes):
-   ```bash
-    find dir -size +500k
-   ```
-
---
-
-The letter after the number can be `c`, `w`, `k`, `M`, or `G`. Guess what they stand for.
-- Finding files in `dir` that are executable:
-   ```bash
-    find dir -executable
-   ```
---
-
-- Finding files in `dir` that are owned by user stewart and group cs_ossd
-   ```bash
-    find dir -user stewart -a -group cs_ossd
-   ```
-__Lesson__: `-a` is the logical AND-operator
-
----
-## `find`
-### finding by other properties
-
-- Finding files in `dir` for which people other than the owner and the group
-have write access, whether or not the owner or group does.
-   ```bash
-    find dir -perm  -002
-   ```
-It is dangerous to let anyone be able to write to a file. This looks for all
-such files.
-
-- Finding files in `dir` for which the owner has read, write, execute permission
-and no one else has access of any kind:
-   ```bash
-    find dir -perm  700
-   ```
-- Finding files in `dir` that are __regular__ files:
-   ```bash
-    find dir -type f
-   ```
-To find directories, replace `f` with `d`.
-
----
-## `find`
-### taking actions when files are found
-
-- You can use add __actions__ to expressions. These actions can be applied to
-the files for which the test returns true, or to a set of arguments that follow
-the action.
-
-- Useful actions include `-print`, `-prune`, and `-exec`.
-There are many others.
-
-    - `-prune` is used to prune the search, i.e., prevent it from descending the tree.
-    - `-exec  <command>` executes the <command> that follows it.
-
-- Run the `file` command on every regular file below the current directory :
-   ```bash
-    find . -type f -exec file '{}' \;
-   ```
-__Lesson__: `exec` is followed by a command. `{}` after the command is replaced
-by the file that matched the test. It must be written in quotes, and the semicolon
-must be escaped with backslash as shown.
-
-- Remove every file whose names ends in `~` below the current directory (dangerous
-if you make a mistake):
-   ```bash
-    find . -name "*~" -execdir /bin/rm '{}' \;
-   ```
+- The next few slides explain the concepts and give examples.
 
 ---
 name: streams
@@ -887,7 +921,8 @@ error 2.
 
 
 ---
-# File Descriptors and Streams
+name: file_descriptors
+## File Descriptors and Streams
 
 - The index values in the array of open files belonging to the process
 are called __file descriptors__. The table below summarizes the different
@@ -901,8 +936,8 @@ File<br> Descriptor | Stream | Associated Device |  C symbolic name
 
 
 ---
-# Redirection
-### Input Redirection
+name: io_redirection
+## I/O Redirection
 
 - All shells allow for  any stream to be disconnected from its
 default device and reconnected to or from files,
@@ -926,45 +961,50 @@ The contents of file1 are redirected to the standard  input of the `cat` command
 which is not very useful, but illustrates the idea.
 
 ---
-# Redirection
-### Input Redirection
+name: input_redirection
+## Input Redirection
 
-The `bc` command can be used as a simple calculator. If you type `bc` on the command line,
+- The `bc` command can be used as a simple calculator. If you type `bc` on the command line,
 it waits for you to enter  an arithmetic expression such as 25 + 4 or
 something more complex. When you type <enter> it evaluates and prints the
 expression.
 
-6 + 4
+ `6 + 4`
 --
 <br>
-10
+ `10`
 --
 <br>
-12 ^ 2
+ `10 ^ 3`
 --
 <br>
-144
+ `1000`
+--
+<br>
+ `print "The product of 10 and 200 is " , 10 * 200, "\n"`
+--
+<br>
+ `The product of 10 and 200 is 2000`
+--
 
---
-
-Suppose `file1`  contains the sequence of arithmetic expressions
+- Suppose a file named `expressions`  contains the following lines:
    ```bash
-    6 + 4
-    12 ^ 2
+    print "10^2 = ",      10^2,   "\n"
+    print "2^10 = ",      2^10,   "\n"
    ```
 --
-Run the command `bc < file1` <!-- > -->
+- Running the command `bc < expressions` <!-- > -->
 at the command prompt:
    ```bash
-    $ bc < file1
-    10
-    144
+    $ bc < expressions
+    10^2 = 100
+    2^10 = 1024
    ```
 <!-- > -->
-This shows that file1 replaced `bc`'s standard input.
+ shows that `expressions` replaced `bc`'s standard input.
 ---
-# Redirection
-### Output Redirection
+name: output_redirection
+## Output Redirection
 
 - Attaching a file to the standard output is called __output redirection__.
 The `>` operator is the __output redirection operator__:
@@ -989,9 +1029,10 @@ concatenates files `file1`, `file2`, and `file3` into a new file named `combined
    ```bash
     cat file1 file2 file3  >| combined_file
    ```
+-
 ---
-# Redirection
-### Error Redirection
+name: error_redirection
+## Error Redirection
 
 - Attaching a file to the standard error is called __error redirection__.
 The `>` operator is also used to redirect standard error, but with a slight
@@ -1024,8 +1065,8 @@ use
 
 
 ---
-# Redirection
-###  Redirection Examples
+name: redirection_examples
+## Redirection Examples
 
 - Some commands can produce many error messages. Sometimes you don't care about
 the errors. If you try to display the _entire file system_ (bad idea) using `ls -R`
@@ -1042,17 +1083,19 @@ input if it is not given a filename as an argument__, to create a plain text fil
 while taking notes, like this:
    ```bash
     $ cat > notes
-    blah blah blah
+    I am typing on the keyboard
+    and trying to write down this stuff before I forget.
     ^D (Control D to stop)
     $ cat notes
-    blah blah blah
+    I am typing on the keyboard
+    and trying to write down this stuff before I forget.
    ```
  We must type Control-D  to terminate the
 `cat` command and close the new file named notes.
 
 ---
-# Redirection
-### Appending
+name: appending
+## Appending
 
 - To append to a file (or to create it if it does not exist) use the
 `append redirection operator` `>>`.
@@ -1068,10 +1111,21 @@ every day. You can do either:
    ```bash
     backup 2>> ~/.backup_errlog  >> ~/.backuplog
    ```
-which sends the errors of the command to one log file and the standard output to
-another.
+which sends the errors of the `backup` command to the `.backup_errlog` log file
+and the standard output to the `.backuplog` file in the home directory.
+
+- Here is a `bash` loop that stores the output of the `git log` command for a set
+or three repositories in a single file named `logfile`. `bash` loops are covered
+elsewhere.
+   ```bash
+     $ for i in repo1 repo2 repo3 ; do
+        echo -e "Repository $i log:\n\n" >> logfile
+        cd $i; git log  >> ../logfile; cd .. ;
+       done
+   ```
 ---
-# Pipes
+name: pipes
+## Pipes
 
 - Attaching the standard output of one command to the standard input of another
 is done by creating a __pipe__.
@@ -1080,13 +1134,302 @@ The `|` operator is the __pipe operator__.
        ```bash
         command1 | command2
        ```
+- __Example__. This pipeline prints the number of lines of each C source code file
+in a given directory, sorted by filename.
 
-- The real power of pipes is that they can be used with __filters__. Examples of
+```bash
+   $ wc -l *.c | sort -k2 | awk '{printf "%s:\t%d\n",$2,$1}'
+```
+- The real power of pipes is that they can be used with __filters__. More examples of
 pipes will follow the introduction of filters.
 
 
 ---
-# Filter Introduction
+name: viewing_files
+## Viewing Files
+- Many of the commands to view the contents of files are simple to use. Some
+are intended for text files only, others any type of file. Because they are easy,
+no examples are given. Look up the syntax and options in the man pages.
+
+- All are used by following the command name with a list of files. They include:
+
+    - `more`  and `less`  -  display a screenful at a time of the given text files
+
+    - `view` -  brings up the `vi` editor in read-only mode. Use it only if you
+know `vi`. It can be given multiple text file names.
+
+    - `cat` -  "__c__oncatenates __a__nd __p__rints" its list of text file arguments. It whizzes
+by on the screen, so use it only to see small files.
+
+    - `od`  - displays an "octal dump" of any file, including binaries.
+It has lots of options to make it very useful. See also `objdump`.
+
+    - `objdump`  - displays information about one or more object files.  The
+options control what particular information to display.
+
+    - `strings` - print the strings of printable characters in files.
+It is very useful for finding the strings in compiled code.
+---
+name: ls
+## `ls`
+
+- This lists information about files and directories
+- Syntax:
+   ```bash
+    ls [option]... [file]...
+   ```
+If no files are given it lists information about the current directory.
+- Some very useful options:
+   ```bash
+       -l    - produce a "long" listing
+       -a    - show all files, including hidden ones
+       -F    - append trailing character to classify type
+       -t    - sort by time of last modification, most recent first
+       -R    - recursively list subdirectories
+   ```
+- Examples
+    - list all files in current directory with most recent first, classifying
+   ```bash
+    $ls -atlF
+   ```
+    - list all files sorted by access time
+   ```bash
+    $ls -atulF
+   ```
+---
+name: basename
+## `basename`
+
+- `basename` strips leading directory path and suffix from filenames
+
+- Syntax:
+   ```bash
+    basename pathname [suffix]
+   ```
+   outputs `pathname` with the leading path removed and, if it has a suffix matching `suffix`
+   with that removed also.
+
+- Examples:
+   ```bash
+    basename /usr/bin/sort
+              -> sort
+    basename include/stdio.h .h
+              -> stdio
+    basename include/stdio.h .foo
+              -> stdio.h   # i.e., suffix does not match
+    basename ~/hunter/cs395.86_s19/blogs/stewart-weekly  -weekly
+              -> stewart
+   ```
+
+
+---
+name: dirname
+## `dirname`
+
+-  `dirname` strips the filename from a pathname, leaving the directory path.
+
+- Syntax:
+   ```bash
+    dirname pathname [pathname] ...
+   ```
+   outputs each pathname with its last non-slash component and trailing slashes
+       removed.
+
+
+- Examples:
+   ```bash
+    dirname /usr/bin/sort
+              -> /usr/bin
+    dirname /usr/bin/gcc /usr/lib/gcc /usr/share/man/man1/gcc.1.gz
+              ->
+                /usr/bin
+                /usr/lib
+                /usr/share/man/man1
+    dirname ~/hunter/cs395.86_s19/blogs/stewart-weekly
+              -> /home/stewart/hunter/cs395.86_s19/blogs
+   ```
+
+---
+name: find
+## `find`
+
+- Its man page states, "search for files in a directory hierarchy", but this is
+an understatement. It is one of the most powerful commands available in Unix.
+
+- The `find` command allows you to apply commands and actions to all files matching
+a set of search criteria in one or more subtrees of the Unix file system.
+
+- Simplified syntax (some options suppressed):
+   ```bash
+       find  [starting-point...]  [expression]
+   ```
+
+- `starting-points` are the directories to act as the roots of the hierarchies to search.
+- `expression` describes what is to be searched for; it includes search criteria as
+well as actions to perform.
+
+- With no expression, `find` displays every file in the trees rooted at the `starting-points`.
+The default action is `-print`
+
+   ```bash
+    find . -print
+   ```
+is equivalent to
+   ```bash
+    find .
+   ```
+
+---
+name: find_by_name
+##  finding by file name
+
+- Finding (printing paths to) all files in the directory `dir` whose name ends in `.cpp`:
+   ```bash
+    find dir -name "*.cpp"
+   ```
+__Lesson__: The `*` is a shell wildcard that matches 0 or more characters, including the
+period if it is the first character in the name.
+
+- Finding all files in `dir` whose name is exactly `main.cpp`
+   ```bash
+    find dir -name "main.cpp"
+   ```
+--
+
+- Finding all files in `dir` whose name ends in any of `.jpg`, `.JPG`, `.JPg`, etc:
+   ```bash
+    find dir -iname "*.jpg"
+   ```
+__Lesson__: `-iname` is a case-insensitive version of `-name`.
+
+--
+
+- Finding all files in `dir` whose name ends in any of `.jpg`, `.JPG`, `.jpeg`, `.JPEG`, etc:
+   ```bash
+    find dir -iname "*.jpg"  -o -iname "*.jpeg"
+   ```
+__Lesson__: Expressions return `true` or `false`.
+`-iname` is a __test__ applied to each file as it is found. If the filename matches,
+it returns `true` otherwise `false`.
+The `-o` is a logical OR-operator; its operands above are `-iname "*.jpg"`
+and  `-iname "*.jpeg"`.
+If either is true then the filename passes the test.
+
+---
+name: find_by_time
+## finding by time stamp
+
+- Unix timestamps files with three stamps: time of last access, time of last
+modification, and time of last change of status (file properties).
+
+- Finding files in `dir` that have been __modified__ within the past 3 hours:
+   ```bash
+    find dir -mmin -180
+   ```
+__Lesson__: -mmin expects an argument in minutes. The `-` in front of 180 means "less than".
+
+--
+
+- Finding files in `dir` that have been modified more than 3 hours ago:
+   ```bash
+    find dir -mmin +180
+   ```
+--
+
+- Finding files in `dir` that have been __accessed__ (use `-amin`) exactly 3 hours ago:
+   ```bash
+    find dir -amin 180
+   ```
+--
+
+- Finding files in `dir` whose __status changed__ (use `-cmin`) within the past 8 hours:
+   ```bash
+    find dir -cmin -480
+   ```
+
+---
+name: find_misc
+## finding by other properties
+
+- In Unix, properties such as size, type, permissions,  user ownership, group
+ownership, and more, are stored in a special structure called an __inode__. `find`
+can test any of these properties.
+
+- Finding files in `dir` larger than 500 Kilobytes (1024 bytes):
+   ```bash
+    find dir -size +500k
+   ```
+
+--
+
+The letter after the number can be `c`, `w`, `k`, `M`, or `G`. Guess what they stand for.
+- Finding files in `dir` that are executable:
+   ```bash
+    find dir -executable
+   ```
+--
+
+- Finding files in `dir` that are owned by user stewart and group cs_ossd
+   ```bash
+    find dir -user stewart -a -group cs_ossd
+   ```
+__Lesson__: `-a` is the logical AND-operator
+
+---
+name: find_misc2
+## finding by other properties
+
+- Finding files in `dir` for which people other than the owner and the group
+have write access, whether or not the owner or group does.
+   ```bash
+    find dir -perm  -002
+   ```
+It is dangerous to let anyone be able to write to a file. This looks for all
+such files.
+
+- Finding files in `dir` for which the owner has read, write, execute permission
+and no one else has access of any kind:
+   ```bash
+    find dir -perm  700
+   ```
+- Finding files in `dir` that are __regular__ files:
+   ```bash
+    find dir -type f
+   ```
+To find directories, replace `f` with `d`.
+
+---
+name: find_actions
+##  taking actions when files are found
+
+- You can use add __actions__ to expressions. These actions can be applied to
+the files for which the test returns true, or to a set of arguments that follow
+the action.
+
+- Useful actions include `-print`, `-prune`, and `-exec`.
+There are many others.
+
+    - `-prune` is used to prune the search, i.e., prevent it from descending the tree.
+    - `-exec  <command>` executes the <command> that follows it.
+
+- Run the `file` command on every regular file below the current directory :
+   ```bash
+    find . -type f -exec file '{}' \;
+   ```
+__Lesson__: `exec` is followed by a command. `{}` after the command is replaced
+by the file that matched the test. It must be written in quotes, and the semicolon
+must be escaped with backslash as shown.
+
+- Remove every file whose names ends in `~` below the current directory (dangerous
+if you make a mistake):
+   ```bash
+    find . -name "*~" -execdir /bin/rm '{}' \;
+   ```
+
+
+---
+name: filter_intro
+## Filter Introduction
 
 - A filter is a UNIX command whose input and output are plain text,
 and that expects its input from standard input and puts its output
@@ -1103,7 +1446,8 @@ based on a pattern or on their position in the line or file.
 Unix systems.
 
 ---
-# Filter Synopsis
+name: filter_synopsis
+## Filter Synopsis
 
 Filter | Description
 :--- |:---
@@ -1128,7 +1472,8 @@ Filter | Description
 `wc`  |  print newline, word, and byte counts for each file
 
 ---
-# `cat` and  `tac`
+name: cat_tac
+## `cat` and  `tac`
 
 - The `cat` command is a technically a filter, but without options it does
 no transformation: its output is exactly its input.
@@ -1155,7 +1500,8 @@ non-blank lines, `-s` _squeezes_ blank lines, and `-v` shows non-printing charac
      1	bash_tutorial_01.html
    ```
 ---
-#  `head` and `tail`
+name: head_tail
+##  `head` and `tail`
 - Simply put, `head` displays the first _N_ lines of its input and `tail`, the last
 _N_ lines. By default for both,  _N_ is 10. To print a different number of lines,
 explicity use `-N` where _N_ is a positive integer:
@@ -1183,8 +1529,10 @@ get the summary of any command from the man page for it:
     man awk | head -4 | tail -1
    ```
  since the summary is always line 4.
+
 ---
-#  `sort`
+name: sorting
+##  `sort`
 - `sort` is one of the most useful and easy to use filters:
 
    ```bash
@@ -1214,7 +1562,8 @@ character code of the terminal, which is usually ASCII or UTF-8.
 ]
 
 ---
-#  `sort` Examples
+name: sort_examples1
+##  `sort` Examples (1)
 
 - Assume `myfile` contains the lines
    ```bash
@@ -1240,7 +1589,8 @@ character code of the terminal, which is usually ASCII or UTF-8.
     b
    ```
 ---
-#  `sort` Examples
+name: sort_examples2
+##  `sort` Examples (2)
 
 - To force `sort` to ignore case and fold upper and lower case together, using
 GNU's `sort`, the option is `-f`:
@@ -1269,7 +1619,8 @@ has colon-separated fields, and you want to sort numerically by field 2, use
       sort -t':' -k2 -n   myfile
    ```
 ---
-#  `uniq`
+name: uniq
+##  `uniq`
 
 - `uniq` filters out matching adjacent lines from its input stream, sending
 unique lines to output.  If the input stream is sorted and has duplicates, this
@@ -1289,7 +1640,8 @@ produces output with duplicates removed:
    ```
 
 ---
-# Combining Filters
+name: combining_filters
+## Combining Filters
 
 - Putting some of this filters together,
 NYC Open Data has a database of baby names whose lines look like this:
@@ -1316,8 +1668,8 @@ this pipeline, assuming the file is named `babynames.csv`:
  sort -k4 babynames.csv | cut -d, -f4 | uniq -ic | sort -k1 -nr | head -10
 ```
 ---
-
-# Filters: `grep`, `egrep`, and `fgrep`
+name: grep_family
+## Filters: `grep`, `egrep`, and `fgrep`
 
 - These commmands are the most powerful of all.
 `grep` and `egrep` are given a pattern, called a __regular expression__, and
@@ -1353,7 +1705,8 @@ __Lesson__: Enclose the pattern in single quotes  to
  prevent the shell from interfering.
 
 ---
-# Regular Expression Rules
+name: regex1
+## Regular Expression Rules
 - In the rules that follow, `\0` denotes an empty string.
 - The complete set of rules can be found in the __regex__ man page in
 section 7, which defines the POSIX-compliant regular expressions.
@@ -1376,7 +1729,8 @@ __closure__ operator.
 
 
 ---
-# Regular Expression Rules
+name: regex2
+## Regular Expression Rules (2)
 
 - Use __`\( \)`__  to group for applying \* to more than one character:
     - __`\(ab\)*`__ matches 0 or more `ab`'s:
@@ -1400,8 +1754,8 @@ regular expression. You can also use ordinary parentheses for grouping:
 because `grep` was used instead of `egrep`.
 
 ---
-# Regular Expression Rules
-### Character Classes
+name: regex3
+## Regular Expression Character Classes
 
 - The period __`.`__ matches any single character.
 <!-- [ [ -->
@@ -1431,8 +1785,8 @@ __`[^0-9]`__   | matches anything except a digit.
 
 
 ---
-# Regular Expression Rules
-### Character Classes
+name: regex4
+## Regular Expression Character Classes (2)
 
 - You can combine character classes with the * operator to create useful patterns:
 
@@ -1448,8 +1802,8 @@ __`\(...\)*`__      | matches any string whose length is a multiple of 3.
 
 
 ---
-# Regular Expression Rules
-### Anchors
+name: anchors
+## Regular Expressions: Anchors
 
 - The caret __`^`__ anchors a regex to the beginning of a line,
 and the dollar sign, __`$`__, anchors it to the end of the line.
@@ -1474,8 +1828,8 @@ __`fred\>`__ | matches any word ending with `fred` but not words like `freddy`
 __`\<fred\>`__ | matches exactly  `fred` surrounding by non-word characters
 
 ---
-# Regular Expression Rules
-### Backreferences
+name: backreferences
+## Regular Expressions: Backreferences
 
 - When you enclose a basic regular expression in __`\( \)`__ brackets, or an extended
 regular expression in ordinary parentheses __`( )`__,
@@ -1503,8 +1857,8 @@ the string that matched it is "remembered" for future use.
     abc:666::abc:666
 
 ---
-# Filters: `cut` and `paste`
-### `cut`
+name: cut_paste1
+## Filters: `cut` and `paste`
 
 - Both  `cut` and `paste` are handy. `cut` can be used to cut lines in specific
 places, whether at character positions, or by field positions, and can output
@@ -1528,8 +1882,8 @@ field.
 
 
 ---
-# Filters: `cut` and `paste`
-### `paste`
+name: cut_paste2
+## Filters: `cut` and `paste` (2)
 
 - `paste` combines lines  consisting  of  the sequentially corresponding
 lines from different files, separated by TABs, to standard output.
@@ -1570,8 +1924,9 @@ Tokyo   Japan
 ```
 ]
 ---
-# Filters: `cut` and `paste`
-### `paste`
+name: cut_paste3
+## Filters: `cut` and `paste` (3)
+
 
 - We can feed standard input into the `paste` command simultaneously. A
 hyphen '-' represents standard input when it is used in place of a filename
@@ -1597,7 +1952,8 @@ $seq 1 30 | paste -  - -
  Pretty interesting?
 
 ---
-#  `awk`
+name: awk1
+##  `awk`
 
 - `awk` is not just an extremely powerful filter; _it is a programming language_.
 The `awk` filter implements the AWK programming language, named after its
@@ -1624,8 +1980,10 @@ Fields are named `$1`,`$2`, `$3`, and so on. $0 is the entire line.
 
 - There is a lot to learn about `awk` - these slides contain just some
 simple examples.
+
 ---
-# `awk`
+name: awk2
+## `awk` (2)
 
 - Every `awk` program is a sequence of __pattern-action__ instructions or
 function definitions*.
@@ -1653,8 +2011,10 @@ function definitions*.
    ```
 which prints the second field in any line whose first field is the string
 "reboot" from the input files `file1`, `file2`, and `file3`.
+
 ---
-# `awk`
+name: awk3
+## `awk` (3)
 - The input field separator can be a character or a regular expression.
 The command-line option `-F` sets it; use single quotes to protect
 regular expressions from the shell:
@@ -1680,8 +2040,10 @@ a simple `print` instruction as well as all forms of the `C` `printf`:
  ```
  prints the first two fields with a TAB between them and a newline
 after.
+
 ---
-# `awk`
+name: awk4
+## `awk` (4)
 
 - The __`BEGIN`__ pattern causes `awk` to execute the associated action __before__
 reading its input. The __`END`__ pattern's action is executed __after__ all
@@ -1709,7 +2071,8 @@ prints the average of the field $1 values:
    ...
 ```
 ---
-# `awk`
+name: awk5
+## `awk` (5)
 
 - The variable `$NF` is the last field on a line, so
 ```bash
@@ -1727,12 +2090,14 @@ prints the average of the field $1 values:
               printf "Field %d:\t%s\n",i,$i \
     }'
 ```
+<!-- / -->
   The backslashes are needed to prevent the shell from treating each line as
 a separate command. Notice that `$i` is used to iterate through
 `$1`, `$2`,... `$NF`.
 
 ---
-# `awk`
+name: awk6
+## `awk` (6)
 
 - You can use extended regular expression matching in the pattern:
 ```bash
@@ -1755,7 +2120,8 @@ unused user id in the password file to assign to a new user:
  change it.
 
 ---
-# `awk`
+name: awk7
+## `awk` (7)
 
 - `awk` has the following control flow statements:
   - if (condition) statement [ else statement ]
@@ -1780,7 +2146,8 @@ unused user id in the password file to assign to a new user:
 page is a good place to look for a comprehensive description of what it can do.
 
 ---
-# Filters yet to come:
+name: more_filters
+## Filters yet to come:
 
 - Some filters have not yet made it into these slides. The most important of
 these are
@@ -1789,8 +2156,10 @@ these are
  Of these, `sed` is the most powerful, and the hardest to master.
 The others have a shallow learning curve, and you can read the manpages for them
 to figure out how to use them.
+
 ---
-#Useful Links
+name: links
+## Useful Links
 
 A list of some relevant links
 
@@ -1800,7 +2169,9 @@ A list of some relevant links
 - [Introduction to Text Manipulation in Unix](https://developer.ibm.com/articles/au-unixtext/#25.Resources|outline)
 
 ---
+name: exercise1
 ## Exercises 1
+
 Start with some easier ones first. In the exercises, the word _command_ means
 a structured command - you might need to use pipes or even nested commands.
 
@@ -1817,6 +2188,7 @@ working directory.For simplicity, assume that the directory contains only plain
 text files.
 
 ---
+name: exercise2
 ## Exercises 2
 
 1. Write a command that  prints the number of times that the word "lie" occurs in
@@ -1838,6 +2210,7 @@ then it will display
 
 
 ---
+name: exercise3
 ## Exercises 3
 
 1. The `ps` command displays process status information for a set of processes
@@ -1864,7 +2237,7 @@ the above script is in a file named `echo3` then we would see the following:
 if we first make the script executable by typing `chmod +x echo3`.
 
 ---
-
+name: exercise4
 ## Exercises 4
 
 1. The `history` command in bash displays the commands you have run recently.
@@ -1881,7 +2254,9 @@ date appended to the name, so that
 would create `myfile.2019.11.10` if run on November 10, 2019. Don't worry about
 error checking such as whether the file exists or whether you have permission to
 create a file in the current directory.
+
 ---
+name: exercise5
 ## Exercises 5
 1. Suppose that you want to drop down the headings by one level each in a set of
 markdown files whose names end in a `.md` extension, in a directory named `documents`.
@@ -1905,6 +2280,7 @@ to make a backup in case you are nervous about ruining your files.
  What is the `sed` command that can do this?
 
 ---
+name: exercise6
 ## Exercises 6
 1. Suppose that for stylistic reasons, you need to replace every C-style single-line comment
 in your C++ file by C++ style comments. For example, you need to
@@ -1930,8 +2306,9 @@ to make a backup in case you are nervous about ruining your files.
 
  What is the `vi` substitution that will do this?
  What is the `sed` command that can do this?
----
 
+---
+name: exercise7
 ## Exercises 7
 
 1. (HARD) There is a command called `cal` that displays
