@@ -63,7 +63,9 @@ name: toc
 [Complex Command Syntax](#cmmd_syntax3)<br>
 [Miscellaneous Commands](#misc_commands)<br>
 [Miscellaneous Commands](#misc_commands2)<br>
-[The Power of I/O Redirection](#redirection_power)<br>
+[The Power of I/O Redirection](#redirection_examples1)<br>
+[More Examples of Redirection](#redirection_examples2)<br>
+[More Examples of I/O Redirection](#redirection_examples3)<br>
 [Streams, Files, and Redirection](#streams)<br>
 [File Descriptors and Streams](#file_descriptors)<br>
 [I/O Redirection](#io_redirection)<br>
@@ -80,11 +82,11 @@ name: toc
 [`find`](#find)<br>
 [finding by file name](#find_by_name)<br>
 [finding by time stamp](#find_by_time)<br>
-[finding by other properties](#find_misc)<br>
-[finding by other properties](#find_misc2)<br>
 ---
 ### Table of Contents
 
+[finding by other properties](#find_misc)<br>
+[finding by other properties](#find_misc2)<br>
 [taking actions when files are found](#find_actions)<br>
 [Filter Introduction](#filter_intro)<br>
 [Filter Synopsis](#filter_synopsis)<br>
@@ -107,11 +109,11 @@ name: toc
 [Filters: `cut` and `paste` (3)](#cut_paste3)<br>
 [`awk`](#awk1)<br>
 [`awk` (2)](#awk2)<br>
-[`awk` (3)](#awk3)<br>
-[`awk` (4)](#awk4)<br>
 ---
 ### Table of Contents
 
+[`awk` (3)](#awk3)<br>
+[`awk` (4)](#awk4)<br>
 [`awk` (5)](#awk5)<br>
 [`awk` (6)](#awk6)<br>
 [`awk` (7)](#awk7)<br>
@@ -124,6 +126,7 @@ name: toc
 [Exercises 5](#exercise5)<br>
 [Exercises 6](#exercise6)<br>
 [Exercises 7](#exercise7)<br>
+
 
 ---
 name: overview
@@ -860,23 +863,56 @@ or
    ```
 
 ---
-name: redirection_power
+name: redirection_examples1
 ## The Power of I/O Redirection
 
 - One of the brilliant inventions of Unix is .greenbold[I/O redirection].
 To get just a small taste of its power, run a few of these commands,
 all of which use the .greenbold[pipe] redirection operator:
 
-  1. Generate a random string of length 32:
+  1. Generate a random string of length 32 (suitable for a strong password):
   ```bash
      $ cat /dev/urandom | tr -dc 'a-zA-Z _&%$#0-9-' | fold -w 32 | head -1
   ```
+
+     If you want to store it in a new file named `mypasswd`, then use
+  ```bash
+     $ cat /dev/urandom | tr -dc 'a-zA-Z _&%$#0-9-' | fold -w 32 | head -1 > mypasswd
+  ```
   1. Generate a sorted list of user names of people who have logged into the
-  system recently:
+  system recently (excluding `root` and `wtmp`):
   ```bash
     $ last -w | sort -k1 | awk '{print $1}' | uniq | grep -Ev 'wtmp|root'
    ```
-  1. New York State maintains an open data set of Covid testing by date and county.
+---
+name: redirection_examples2
+## More Examples of Redirection
+
+  1. Suppose  you have a large directory of source files and want a list of every
+  line in which a call to the function `read` is made. Knowing it has three arguments
+  we can use this:
+  ```bash
+    $ grep -Ron  'read(.*,.*,.*)' *  | awk -F: '{printf "%-32s %6d  %s\n",$1,$2,$3}'
+   ```
+  A portion of output is below:
+  ```
+    chapter05/restart_demo.c           86 read(0, &c, 4)
+    chapter05/canon_mode_test2.c      170 read(0, input, 10)
+    chapter05/nonblockdemo.c          186 read(STDIN_FILENO, &ch, 1) ) > 0 )
+    chapter05/simplevi.c              394 read(STDIN_FILENO, &c, 1) > 0  )
+    chapter05/simplevi.c              410 read(STDIN_FILENO, &c, 1) > 0  )
+    chapter05/simplevi.c              577 read(STDIN_FILENO, &c, 1)
+    chapter05/simplevi.c              607 read(STDIN_FILENO, &c, 1)
+    chapter05/simplevi.c              609 read(STDIN_FILENO, &c, 1)
+    chapter08/upcased2.c              159 read( publicfifo, (char*) &msg, sizeof(msg)) > 0 )
+    chapter08/upcased2.c              189 read(client_rawtext_fd, buffer, PIPE_BUF)) > 0 )
+  ```
+---
+name: redirection_examples3
+## More Examples of I/O Redirection
+
+1. This one uses `awk` and `sort` together.
+New York State maintains an open data set of Covid testing by date and county.
 The following command prints a line for each date showing the number of new positive
 test cases in the given county, sorted by increasing number of cases:
    ```bash
@@ -884,7 +920,8 @@ test cases in the given county, sorted by increasing number of cases:
      { printf "New positive Covid cases in Queens on %s is %d\n",$1,$3}' \
         New_York_State_Statewide_COVID-19_Testing.csv | sort -n -k10
    ```
-- The next few slides explain the concepts and give examples.
+- Notice how these examples rely heavily on the power of `awk`. `awk` is a very powerful
+filter that is worth learning.
 
 ---
 name: streams
@@ -1017,7 +1054,7 @@ Example
    ```
 concatenates files `file1`, `file2`, and `file3` into a new file named `combined_file`.
 
- If `combined_file` already existed and the `bash` variable `noclobber` is set,
+ If `combined_file` already existed and the `bash` variable `noclobber` is set,q
  the command fails and you will see an error message such as
    ```bash
     bash: combined_file: cannot overwrite existing file
@@ -1592,8 +1629,8 @@ name: sort_examples1
 name: sort_examples2
 ##  `sort` Examples (2)
 
-- To force `sort` to ignore case and fold upper and lower case together, using
-GNU's `sort`, the option is `-f`:
+- To force `sort` to ignore case and the current locale, and fold upper and
+lower case together, using GNU's `sort`, the option is `-f`:
    ```bash
     LC_COLLATE=C  -f sort myfile
     a
@@ -1605,9 +1642,9 @@ GNU's `sort`, the option is `-f`:
 - `sort` by default will treat numbers like strings. For example, it will sort
 1, 2, 10, 20 in this order:  1, 10, 2, 20.
 
-- To tell `sort` to sort __numerically__, use `-n`.
+- To tell `sort` to sort .bluebold[numerically], use `-n`.
 
-- To tell `sort` to __reverse__ its order, use `-r`.
+- To tell `sort` to .bluebold[reverse] its order, use `-r`.
 
 - To tell `sort` to delete duplicate lines on output, use `-u`.
 
@@ -1656,17 +1693,19 @@ this pipeline, assuming the file is named `babynames.csv`:
 ```bash
  sort -k4 babynames.csv | cut -d, -f4 | uniq -ic
 ```
- where `sort` sorts using the 4th field, after which `cut`* prints only the 4th field, then
+ where `sort` sorts using the 4th field, after which `cut`.super[1] prints only the 4th field, then
  `uniq` filters out duplicates and puts counts to the left of the names, ignoring
  case.
+
+  We can get the ten most frequent names like this:
+```bash
+   sort -k4 babynames.csv | cut -d, -f4 | uniq -ic | sort -k1 -nr | head -10
+```
+
 .footnote[
-* The `cut` filter is described later in these slides.
+1 The `cut` filter is described later in these slides.
 ]
 
- We can get the ten most frequent names like this:
-```bash
- sort -k4 babynames.csv | cut -d, -f4 | uniq -ic | sort -k1 -nr | head -10
-```
 ---
 name: grep_family
 ## Filters: `grep`, `egrep`, and `fgrep`
@@ -1684,15 +1723,16 @@ they are used by `vi`, `sed`, `ed`, `awk`, `grep`, and `egrep`.
     grep '\<cout\>'  prog.cpp
    ```
 --
- prints all lines containing the exact word `cout` in file `prog.cpp`.
+ prints all lines containing the exact word `cout` in file `prog.cpp`. The
+brackets `\<` and `\>` mean "match only .redbold[whole words]" so this does not match
+"scout" or "couty".
 
 --
    ```bash
-    grep -c '^ *$' prog.cpp
+    grep -c '^$' prog.cpp
    ```
 --
- prints a count of the number of lines in `prog.cpp` that contain only blanks or
-no characters at all.
+ prints a count of the number of empty lines in `prog.cpp`.
 
 --
    ```bash
@@ -1701,8 +1741,7 @@ no characters at all.
 --
  prints all lines in `prog.cpp` that have C-style comments `/* ... */`.
 
-__Lesson__: Enclose the pattern in single quotes  to
- prevent the shell from interfering.
+- .redbold[IMPORTANT. Always enclose the pattern in single quotes.]
 
 ---
 name: regex1
@@ -1760,19 +1799,20 @@ name: regex3
 - The period __`.`__ matches any single character.
 <!-- [ [ -->
 
- ` ` | ` `
-:--- |:---
-__`[list-of-characters]`__ | matches any single character in the list.
-__`[a6j&]`__       | matches a, 6, j, or &
-__`[0-9]`__        |  matches any single digit
-__`[a-zA-Z0-9]`__  |  matches any letter or digit
-__`[]]`__      |  matches right square bracket `]`
-__`[0-9-]`__    |matches any single digit or hyphen
-__`[-0-9]`__     | matches any single digit or hyphen
-__`[_a-zA-Z0-9]`__ | matches any letter, digit or underscore.
+|  |
+|:--- |:---
+| __`[list-of-characters]`__ | matches any single character in the list.
+| __`[a6j&]`__       | matches a, 6, j, or &
+| __`[0-9]`__        |  matches any single digit
+| __`[a-zA-Z0-9]`__  |  matches any letter or digit
+|__`[]]`__      |  matches right square bracket `]`
+|__`[0-9-]`__    |matches any single digit or hyphen
+|__`[-0-9]`__     | matches any single digit or hyphen
+|__`[_a-zA-Z0-9]`__ | matches any letter, digit or underscore.
 
 
-- __`\w`__ is a shorthand for __`[_a-zA-Z0-9]`__. These characters are called
+- There are shorthands for these. For example, __`\w`__ is a shorthand
+for __`[_a-zA-Z0-9]`__. These characters are called
 __word characters__.
 
 - The `^` inside brackets means the complement:
