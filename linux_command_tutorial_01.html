@@ -1113,7 +1113,7 @@ this:
    ```bash
     ls -R /  2>/dev/null  > verybigfile
    ```
-__Lesson__: `/dev/null` is a black hole; any data written to it is discarded.
+.redbold[Lesson]: `/dev/null` is a black hole; any data written to it is discarded.
 
 - We can take advantage of the fact that __the `cat` command reads from standard
 input if it is not given a filename as an argument__, to create a plain text file
@@ -1324,7 +1324,7 @@ name: find_by_name
    ```bash
     find dir -name "*.cpp"
    ```
-__Lesson__: The `*` is a shell wildcard that matches 0 or more characters, including the
+.redbold[Lesson]: The `*` is a shell wildcard that matches 0 or more characters, including the
 period if it is the first character in the name.
 
 - Finding all files in `dir` whose name is exactly `main.cpp`
@@ -1337,7 +1337,7 @@ period if it is the first character in the name.
    ```bash
     find dir -iname "*.jpg"
    ```
-__Lesson__: `-iname` is a case-insensitive version of `-name`.
+.redbold[Lesson]: `-iname` is a case-insensitive version of `-name`.
 
 --
 
@@ -1345,7 +1345,7 @@ __Lesson__: `-iname` is a case-insensitive version of `-name`.
    ```bash
     find dir -iname "*.jpg"  -o -iname "*.jpeg"
    ```
-__Lesson__: Expressions return `true` or `false`.
+.redbold[Lesson]: Expressions return `true` or `false`.
 `-iname` is a __test__ applied to each file as it is found. If the filename matches,
 it returns `true` otherwise `false`.
 The `-o` is a logical OR-operator; its operands above are `-iname "*.jpg"`
@@ -1363,7 +1363,7 @@ modification, and time of last change of status (file properties).
    ```bash
     find dir -mmin -180
    ```
-__Lesson__: -mmin expects an argument in minutes. The `-` in front of 180 means "less than".
+.redbold[Lesson]: -mmin expects an argument in minutes. The `-` in front of 180 means "less than".
 
 --
 
@@ -1410,7 +1410,7 @@ The letter after the number can be `c`, `w`, `k`, `M`, or `G`. Guess what they s
    ```bash
     find dir -user stewart -a -group cs_ossd
    ```
-__Lesson__: `-a` is the logical AND-operator
+.redbold[Lesson]: `-a` is the logical AND-operator
 
 ---
 name: find_misc2
@@ -1453,7 +1453,7 @@ There are many others.
    ```bash
     find . -type f -exec file '{}' \;
    ```
-__Lesson__: `exec` is followed by a command. `{}` after the command is replaced
+.redbold[Lesson]: `exec` is followed by a command. `{}` after the command is replaced
 by the file that matched the test. It must be written in quotes, and the semicolon
 must be escaped with backslash as shown.
 
