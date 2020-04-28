@@ -236,7 +236,7 @@ to recall and execute previous commands.super[1].
 
 --
 
-- __Example__.
+- .redbold[Example].
 
     I enter the following three commands, the last two of which are
 just gibberish:
@@ -267,7 +267,7 @@ name: command_editing
 allows you to use the left-arrow and right-arrow keys to move the cursor in the
 current command and then modify it by inserting or removing characters.
 
-- __Example__.
+- .redbold[Example].
   I first type the following command but DO NOT press the .greenbold[ ENTER ]
 key (henceforth called .greenbold[newline]):
   ```bash
@@ -298,7 +298,7 @@ name: command_intro
 - Unix commands are the tools that you use to get things done in Unix. You type
 their .greenbold[names] at the shell prompt, and they do their magic.
 
-- __Examples__.
+- .redbold[Examples].
    ```bash
     $ date
     Thu Mar 28 11:22:45 EDT 2019
@@ -505,7 +505,7 @@ name: navigating_dirs
 your current directory. You give it the name of a directory, either as an
 absolute pathname or as a relative pathname.
 
-- __Examples__.
+- .redbold[Examples].
   ```bash
      $ pwd
      /data/biocs/b/cshome/sweiss
@@ -532,7 +532,7 @@ name: command_types
 
   Sometimes they can be more than one of these.
 
--  __Examples__
+-  .redbold[Examples]
 
   - Commands like `ls` and `who` are executable binaries. `ls` is the file
     `/bin/ls` and `who` is the file `/usr/bin/who`.
@@ -756,7 +756,7 @@ name: cmmd_syntax
    ```
 where square brackets `[ ]` mean that the thing enclosed in them is optional.
 
-- __Example__. The man page for the `which` command shows the synopsis
+- .redbold[Example]. The man page for the `which` command shows the synopsis
 
    ```bash
     SYNOPSIS
@@ -927,13 +927,13 @@ filter that is worth learning.
 name: streams
 ## Streams, Files, and Redirection
 
-- A __stream__ is a flow of bytes into or out of a running process. In Unix, a stream is
+- A bluebold[stream] is a flow of bytes into or out of a running process. In Unix, a stream is
 implemented with a data structure that includes buffers to store the bytes and
 various data members to control its flow and keep track of the status of the
 stream.
 
-- Unix provides every running process with three __standard streams__:
-    - __standard input__, __standard output__, and __standard error__
+- Unix provides every running process with three .greenbold[standard streams]:
+   - .greenbold[standard input], .greenbold[standard output], and .greenbold[standard error]
 
 
 
@@ -962,7 +962,7 @@ name: file_descriptors
 ## File Descriptors and Streams
 
 - The index values in the array of open files belonging to the process
-are called __file descriptors__. The table below summarizes the different
+are called .bluebold[file descriptors]. The table below summarizes the different
 views of the standard streams.
 
 File<br> Descriptor | Stream | Associated Device |  C symbolic name
@@ -979,11 +979,11 @@ name: io_redirection
 - All shells allow for  any stream to be disconnected from its
 default device and reconnected to or from files,
 the streams of other processes, or other devices. This is called
-__I/O redirection__.
+.bluebold[I/O redirection].
 
-- Attaching a file to the standard input is called __input redirection__.
+- Attaching a file to the standard input is called .bluebold[input redirection].
 The  `<`  <!-- > -->
-operator is the __input redirection operator__:
+operator is the .bluebold[input redirection operator]:
 
    ```bash
     command < file
@@ -1043,8 +1043,8 @@ at the command prompt:
 name: output_redirection
 ## Output Redirection
 
-- Attaching a file to the standard output is called __output redirection__.
-The `>` operator is the __output redirection operator__:
+- Attaching a file to the standard output is called .bluebold[output redirection].
+The `>` operator is the .bluebold[output redirection operator]:
    ```bash
     command > file
    ```
@@ -1071,13 +1071,13 @@ concatenates files `file1`, `file2`, and `file3` into a new file named `combined
 name: error_redirection
 ## Error Redirection
 
-- Attaching a file to the standard error is called __error redirection__.
+- Attaching a file to the standard error is called .bluebold[error redirection].
 The `>` operator is also used to redirect standard error, but with a slight
 modification; use
    ```bash
     command 2> file
        ```
-__No space__ between `2` and `>`.  `2` is the file descriptor for
+Note: .redbold[No space] between `2` and `>`.  `2` is the file descriptor for
 the standard error stream. In general, if _n_ is a file descriptor, _n_`>` redirects
  the stream associated with it to the file.
 
@@ -1115,8 +1115,8 @@ this:
    ```
 .redbold[Lesson]: `/dev/null` is a black hole; any data written to it is discarded.
 
-- We can take advantage of the fact that __the `cat` command reads from standard
-input if it is not given a filename as an argument__, to create a plain text file
+- We can take advantage of the fact that the `cat` command reads from standard
+input if it is not given a filename as an argument_, to create a plain text file
 while taking notes, like this:
    ```bash
     $ cat > notes
@@ -1171,7 +1171,7 @@ The `|` operator is the __pipe operator__.
        ```bash
         command1 | command2
        ```
-- __Example__. This pipeline prints the number of lines of each C source code file
+- .redbold[Example]. This pipeline prints the number of lines of each C source code file
 in a given directory, sorted by filename.
 
 ```bash
