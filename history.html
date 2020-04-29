@@ -15,7 +15,7 @@ class: center, middle
 
 <br>
 
-## History of Open Source Software
+## A Brief History of Open Source Software
 
 .author[
 Stewart Weiss, derived from slides by Joanna Klukowska<br>
@@ -28,30 +28,34 @@ Unless noted otherwise all content is released under a
 ]
 
 ---
-
+name: forward
 ## Forward
 
-This short set of slides is intended to give you the "big picture" and not so
-much detail.
+- This short set of slides is intended to give you the "big picture" and not so
+much detail - unless it is an interesting tidbit here or there.
 
-The history of open source software is inseparable from the history of the Unix
-operating system. Events like the invention of the personal computer and the
-the creation of the Internet are also major factors in how and when open source
+- The history of open source software is inseparable from the history of the Unix
+and GNU/Linux operating systems.
+Events such as the invention of the personal computer, email, and the
+Internet are also major factors in how and when open source
 developed.
 
-As you will see the world of software has come full circle -- software
-started out open, got closed down for a while, and is gradually becoming ubiquitously
+--
+
+- As you will see, the world of software has come full circle -- software
+started out open, became closed for a while, and is gradually becoming ubiquitously
 open again.
 
 ---
-
+name: beginnings
 ## In the Beginning...
 
-- The earliest commercial computers were shipped with their _operating code_ so that
+- The earliest commercial computers were shipped with their .bluebold[operating code] so that
   users could customize the code for their needs.
 
   - There were no manuals, no instructions, no help from vendors for the shipped software -
-  __users just had to figure it all out on their own__.
+  .bluebold[users just had to figure it all out on their own].
+
   - Code-sharing was common -
     IBM's 704 operating system, the __GM-NAA__ I/O system, was co-written by two users: Robert Patrick of GM,
       and Owen Mock of North American Aviation.
@@ -72,11 +76,11 @@ open again.
 --
 
 - There was no Internet:
-    - widespread sharing limited by the lack of technology
+    - widespread sharing was limited by the lack of technology
     - sharing often done through the original manufacturer of the hardware
 
 ---
-
+name: fifties_sixties
 ## And then ...
 
 - FORTRAN was developed. It was the first high-level programming language.
@@ -106,13 +110,25 @@ __In 1969__
      with the executable__.
 
 ---
-## 1970's
+name: seventies_1
+## Early 1970's
+
+- 1970: email was invented by Ray Tomlinson
 
 - A seemingly insignificant event:
     - Richard Stallman, a student at Harvard, joined the
       Artificial Intelligence Lab at MIT in 1971
 
+- 1973: Dennis Ritchie and Ken Thompson present a paper about UNIX in the
+Symposium on Operating System Priinciples. Audience reacted with enthusiasm and
+wanted copies of code.
+
+-  AT&amp;T is in a bind; decides to give UNIX to academic and research institutions
+just for price of media.
+
 --
+
+- By mid seventies, user groups were being created on the ARPANET
 
 - Culture of sharing continues through the 70's.
     - 1976: Richard Lions of University of New South Wales (Australia) annotates the
@@ -120,22 +136,45 @@ __In 1969__
     - Still in use today.
     - It was the norm to share and build on each others work.
 
---
+---
+name: seventies_2
+## Mid 1970's
 
 - AT&amp;T starts licensing Unix to universities and commercial firms
    (i.e., they had to pay).
     - No support or bug fixes because it would violate its charter as a telephone company.
-    - UC Berkeley Computer Systems Research Group (CSRG) wrote their own
-      version of Unix, named BSD, and gave it out with source code.
---
-    - __AT&amp;T  ultimately sues Berkeley's CSRG for copyright infringement__.
 
+- UNIX was distributed on magnetic tape. Second tape created in 1976 with 50 bug fixes and
+contributions from RAND Corporation, Naval PostGraduate School, UC San Diego, Yale, UIUC.
+AT&amp;T tried to control distribution.
+
+- One day mysteriously, a copy of this 50-bug fix magnetic tape was "found"
+on the road (Mountain Avenue) near Bell Labs. This copy found its way into
+many hands.super[1] and was the beginning of the dissemination of UNIX Version V7.
 --
+
+- UC Berkeley Computer Systems Research Group (CSRG) got a copy and wrote their own
+version of Unix, named BSD, and gave it out with source code.
+
+- __AT&amp;T  ultimately sued Berkeley's CSRG for copyright infringement__.
+
+
+.footnote[
+1 As told by Lou Katz. At 1994 USENIX conference he "confessed" that he got a
+phone message telling him that if he drove down to Mountain Avenue around 2:00 PM that same day
+he would find something of interest. He drove from Manhattan to Murray Hill and found the tape.
+Without claiming  responsibility for leaving it there, Ken Thompson said he
+would not have minded if that 50-bug fix tape "got around".
+The story has been corroborated by others
+who were there. See "The Daemon, the Gnu, and the Penguin"
+by Peter Salus, Reed Media Services, 2008.
+]
+---
+name: seventies_3
+## Late 1970's
 
 - Unix wars start as more and more versions of Unix crop up, many proprietary and
   closed source. The Unix community is balkanized.
-
---
 
 - __The era of personal computers (PCs) arrives__.
    - Altair 8800, IBM 5100, Apple II, TRS-80, and others are marketed for home use.
@@ -330,6 +369,8 @@ improvements they made to the system. As Stallman wrote later: _
 ## Sources and Acknowledgements
 
 - Gordon Haff, _How Open Source Ate Software_, Apress, 2018.
+
+- Peter Salus, _The Daemon, the Gnu, and the Penguin_, Reed Media Services, 2008.
 
 - [Producing Open Source Software](http://producingoss.com/)  by Karl Fogel
 
