@@ -24,7 +24,7 @@ Stewart Weiss <br>
 
 
 .license[
-Unless noted otherwise all content is released under a
+Copyright 2020 Stewart Weiss.  Unless noted otherwise all content is released under a
  [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
 ]
 
@@ -32,7 +32,7 @@ Unless noted otherwise all content is released under a
 ---
 
 
-# A Bit About bash
+## A Bit About bash
 
 - bash was written by Brian Fox in 1989 at the request of Richard Stallman,
 of the Free Software Foundation. It was added to by Chet Ramey in the early 1990's.
@@ -58,7 +58,7 @@ many systems, including most Linux distributions, Apple's macOS, and Solaris.
 
 
 
-# Shell Scripts
+## Shell Scripts
 
 - All common Unix shells are Turing-complete* __scripting__ languages.
 Programs written in a shell's language are called __shell scripts__.
@@ -100,7 +100,7 @@ C shell.
 
 ---
 
-# Running a Shell Script
+## Running a Shell Script
 
 - Suppose the preceding script is in a file named `helloworld` in the current
 working directory. We need to make it an executable file by typing
@@ -125,16 +125,16 @@ readable, so it is better to write, instead,
    ```
 
 ---
-# Changing Your PATH Variable
+## Changing Your PATH Variable
 
 -  To be able to enter
    ```bash
     $ helloworld
    ```
- and have it execute requires that the `PATH` environment variable have
+ and have it execute requires that your `PATH` environment variable have
 your working directory in it.
 
-- PATH is a colon-separated list of directories that are searched by `bash` when you enter
+- `PATH` is a colon-separated list of directories that are searched by `bash` when you enter
 a command name.
 
  To see its contents, enter
@@ -152,18 +152,43 @@ end.
 
 
 ---
-# Passing Command-line Arguments to `bash`
+## Passing Command-line Arguments to a Script
 
-- `bash` stores the words from the command-line after the command itself
+- When you type a command, `bash` stores the successive words from the command line
 in successive parameters `$1`, `$2`, ...
 
+- The very first word, which is the program to run, is stored in `$0`.
+
 - The number of parameters on the command line after the command itself
-is `$#`. The entire set of words after the command is stored in `$*`:
-```bash
- #!/bin/bash
- echo "$*"
-```
+is stored in `$#`. The entire set of words after the command is stored in `$*`:
 displays the words after the program name as they were entered.
+
+- __Example__. Create a file named `echo_args` that contains the following text:
+```bash
+    #!/bin/bash
+    # This displays its arguments.
+    echo "You typed the following words after the command name $0:"
+    echo "$*"
+```
+   Make this script executable and run it with some words after the command name:
+```bash
+    $ echo_args  hi ho hi ho its off to work we go.
+    You typed ./echo_args followed by the following words:
+    hi ho hi ho its off to work we go.
+```
+
+
+---
+## Passing Command-line Arguments to a Script (2)
+
+- In the preceding output:
+```bash
+    You typed ./echo_args followed by the following words:
+    hi ho hi ho its off to work we go.
+```
+  note that the command name has been replaced by "./echo_args". This is because
+`$0` is the the full path name to the command.
+There are ways to truncate it to just the command name. (Look up `basename`.)
 
 - The very last parameter can be accessed by the expression `${@: -1}`, whose
 meaning will not be explained here.
@@ -172,11 +197,24 @@ meaning will not be explained here.
  echo "The last word on the command line is ${@: -1}"
 ```
 ---
-# Control Flow
+## Control Flow
 
 - `bash` has control flow, but it is very serious about its syntax and you must
 play by its rules, otherwise your scripts will not run. Following are some
 examples.
+
+- The if-statement is of the form
+ ```bash
+    if <test-expression>
+    then
+        <true branch>
+    else
+        <false branch>
+    fi
+ ```
+
+- A test expression is an expression starting with the `test` command.
+Examples of tests:
 
  ```bash
     #!/bin/bash
@@ -186,12 +224,11 @@ examples.
         ls .
     else
         ls $1
-fi
+    fi
 
  ```
 
 
----
 
     </textarea>
 

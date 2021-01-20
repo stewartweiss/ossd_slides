@@ -1,0 +1,55 @@
+207a
+   font-size: 70%;
+ }
+
+.sub{
+   vertical-align: sub;
+.
+107a
+/* box formatting */
+.box {
+  font-size: 120%;
+  margin: 0 0.5em 0 0.5em;
+  padding: 0.5em;
+  border-style: solid;
+  border-color: #AAA; border-width:3px;
+  background-color: #AADDFF;
+}
+
+
+.
+101c
+.box2 {
+.
+89c
+    border-style: solid;
+    border-color: #999; border-width:5px;
+    padding: 2.5em;
+.
+85a
+.bluebold{
+    color: #0000DD;
+    font-weight: bold;
+}
+
+.red{
+    color: #dc143c;
+}
+.redbold{
+    color: #dc143c;
+    font-weight: bold;
+}
+
+.green{
+    color: #008000;
+}
+.greenbold{
+    color: #008000;
+    font-weight: bold;
+}
+.
+64a
+.bigger {font-size: 160%; }
+.
+8d
+wq
