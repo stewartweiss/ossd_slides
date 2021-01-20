@@ -25,10 +25,11 @@ Stewart Weiss <br>
 
 
 .license[
-Unless noted otherwise all content is released under a
+Copyright 2020 Stewart Weiss. Unless noted otherwise all content is released under a
  [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
 ]
 
+<!--TOC_START  -->
 ---
 name: toc
 ### Table of Contents
@@ -126,7 +127,7 @@ name: toc
 [Exercises 5](#exercise5)<br>
 [Exercises 6](#exercise6)<br>
 [Exercises 7](#exercise7)<br>
-
+<!--TOC_END  -->
 
 ---
 name: overview
@@ -525,7 +526,7 @@ name: command_types
 ## Types of Commands
 
 - Every Unix command can be any of the following:
-  1. an executable file (either binary or in a scriptnig language)
+  1. an executable file (either binary or in a scripting language)
   1. a command that is built into the shell
   1. an .greenbold[alias]
   1. a .greenbold[shell script] that is in your .greenbold[environment]
@@ -566,7 +567,7 @@ pathname of the executable file that you will run when you type its name.super[1
     /bin/ls
    ```
 
-  The `which` command only displays output for commands that are files, not builtins:
+  The `which` command only displays output for commands that are files, not built-ins:
   it
   ```bash
    $ which bg
@@ -681,12 +682,12 @@ and so on.
 name: bash_help
 ##  Help for  Shell Builtins
 
-- Man pages do not provide help for using shell builtins, unless you are
+- Man pages do not provide help for using shell built-ins, unless you are
 willing to read the 4356-line man page for `bash` itself and search for the
 specific help on that builtin.
 
 - But `bash` has a (builtin) command named `help` that provides help on all
-shell builtins. You do not need to give it the exact name - you can give it the
+shell built-ins. You do not need to give it the exact name - you can give it the
 first few letters and it will display help for all commands starting with
 those letters:
 
@@ -706,7 +707,7 @@ those letters:
             PATTERN
 
         Arguments:
-          PATTERN	Pattern specifiying a help topic
+          PATTERN	Pattern specifying a help topic
 
         Exit Status:
         Returns success unless PATTERN is not found or an invalid option is given.
@@ -728,7 +729,7 @@ utility programs such as compilers and other programming tools.
       `rename, rm, rmdir, stat, strings, touch, view`
 
 - Filters
-    -  `awk, cat, cut, grep, egrep, fgrep, head, join, less, more, od, paste, sed, shuf, sort,`
+    -  `awk, cat, cut, grep, egrep, fold, fgrep, head, join, less, more, od, paste, sed, shuf, sort,`
     `split, tac, tail, tee, tr, uniq, wc`
 
 - System and User Information
@@ -1363,7 +1364,7 @@ modification, and time of last change of status (file properties).
    ```bash
     find dir -mmin -180
    ```
-.redbold[Lesson]: -mmin expects an argument in minutes. The `-` in front of 180 means "less than".
+.redbold[Lesson]: `-mmin` expects an argument in minutes. The `-` in front of 180 means "less than".
 
 --
 
@@ -1494,6 +1495,7 @@ Filter | Description
 `fold`  |  wrap each input line to fit in specified width
 `grep, egrep, fgrep`  |  print lines matching a pattern
 `head`  |  output the first part of files
+`join`  | join lines of two files on a common field
 `less`  |  does more than `more`; see `more` below.
 `more`  |  file perusal filter for crt viewing
 `od`  |  dump files in octal and other formats
@@ -1541,7 +1543,7 @@ name: head_tail
 ##  `head` and `tail`
 - Simply put, `head` displays the first _N_ lines of its input and `tail`, the last
 _N_ lines. By default for both,  _N_ is 10. To print a different number of lines,
-explicity use `-N` where _N_ is a positive integer:
+explicitly use `-N` where _N_ is a positive integer:
 
    ```bash
     head -1 myfile
@@ -1632,7 +1634,7 @@ name: sort_examples2
 - To force `sort` to ignore case and the current locale, and fold upper and
 lower case together, using GNU's `sort`, the option is `-f`:
    ```bash
-    LC_COLLATE=C  -f sort myfile
+    LC_COLLATE=C  sort -f myfile
     a
     A
     b
@@ -1710,7 +1712,7 @@ this pipeline, assuming the file is named `babynames.csv`:
 name: grep_family
 ## Filters: `grep`, `egrep`, and `fgrep`
 
-- These commmands are the most powerful of all.
+- These commands are the most powerful of all.
 `grep` and `egrep` are given a pattern, called a __regular expression__, and
 use this to filter lines that match the pattern.
 `fgrep` is a _fast_, fixed-string version that does not use patterns.
@@ -1895,6 +1897,201 @@ the string that matched it is "remembered" for future use.
        `x:y::x:y`     where `x` and `y` are possible empty strings, such as
 
     abc:666::abc:666
+
+---
+name: sed1
+## Filters: `sed`
+
+- Knowing something about regular expressions will make it easier to see the
+power of `sed`, the Unix stream editor. From the `sed` man page:
+
+ -  A .bluebold[stream editor] is used to perform basic text transformations
+on an input stream (a file or input from  a  pipeline). While  in  some  ways
+similar to an editor which permits scripted edits, `sed` works by making only
+.redbold[one pass] over the input(s), and is consequently more efficient.
+But it is `sed`'s ability to filter text in a pipeline which particularly
+distinguishes it from other  types  of   editors.
+
+- These few slides are designed to show simple ways to use `sed`, mostly by example,
+but also by explaining general rules.
+
+--
+
+- The usual way to invoke `sed` is to give it a .greenbold[sed-script], enclosed
+in single quotes, either followed by the files on which you want to run it, or
+on the right-hand side of a pipe:
+
+   ```bash
+      sed  'sed-script' file1 file2 file3
+      sort file | sed  'sed-script'
+   ```
+
+- A sed-script is usually a single command but it can be multiple commands as well.
+---
+name: sed2
+## `sed` Substitution Command
+
+- .redbold[Example]. The substitution command is the letter `s`. It expects a
+pattern to match, called the .greenbold[target], and a replacement pattern, like
+this:
+   .greenbold[`s/target/replacement/`]:
+
+   ```bash
+      $ echo -e "Hello World\nHello World\nHello World" | sed  's/World/Planet Earth/'
+      Hello Planet Earth
+      Hello Planet Earth
+      Hello Planet Earth
+   ```
+  In `sed` by default, the command is applied to every input line, so this
+command replaces "World" by " Planet Earth" on every line.
+
+- Commands can be given .greenbold[address-specifiers], which are ways to
+specify one or more lines, and then `sed` applies the commands only to the specified
+lines.
+
+- The address specifier comes .redbold[before] the command. .redbold[Examples]:
+
+  ```bash
+     sed '1s/World/Planet Earth/'     # replace only on line 1
+     sed '2s/World/Planet Earth/'     # replace only on line 2
+     sed '1,3s/World/Planet Earth/'   # replace on all lines from 1 to 3
+     sed '1,$s/World/Planet Earth/'   # replace on all lines from first to last
+   ```
+
+---
+name: sed3
+## `sed` Address Specifiers
+
+- Addresses can also be specified with a .greenbold[regex] in slashes. To illustrate, we introduce
+another command, the .greenbold[print] command, which is the letter `p`. The print command prints
+the lines specified by its address specifier.
+
+ But `sed` by default prints all lines anyway, so we need a way to tell
+`sed` not to print all lines. The `-n` option tells `sed`
+.redbold[not to print any lines]. For example this produces no output:
+
+  ```bash
+     $ echo -e "Hello World\nHello World\nHello World" | sed -n 's/World/Planet Earth/'
+  ```
+
+
+- The print command will print the lines specified in its address specifier:
+
+  ```bash
+     $ echo -e "abc \ndef \nghi" | sed -n '1,2p'
+     abc
+     def
+  ```
+  If the address specifier is a regular expression, it prints those lines that match:
+  ```bash
+     $ echo -e "abc \ndef \nghi" | sed -n '/^def/p'
+     def
+  ```
+
+
+---
+name: sed4
+## `sed` Address Specifiers
+
+- The address specifier can be negated as well using `!`, in which case `sed`
+applies the command to lines that are not matched by the address:
+  ```bash
+     $ echo -e "abc \ndef \nghi" | sed -n '/^def/!p'
+     abc
+     ghi
+     $ echo -e "abc \ndef \nghi" | sed -n '2,$!p'
+     abc
+  ```
+
+
+---
+name: sed-scripts
+## Filters: `sed`
+
+- `sed` has many commands but we will not cover them here. Others not covered here
+are
+
+.centered_80[
+ | Command  |  Description  |
+ |:---------  |:----                            |
+ | `=` | Output the current line number.|
+ | `a `| Append text after the current line.|
+ | `d `| Delete the current line.|
+ | `i` | Insert text in front of the current line.|
+ | `y/set1/set2/` | Perform transliteration by converting characters from `set1` to the corresponding characters in `set2`. |
+]
+
+
+---
+name: sed_big_example
+## Using `sed` to display the URLS in an HTML file
+
+Suppose that I have a file that contains many lines of the form
+
+```
+   <li><p><a href="some url">general description</a> more text</p></li>
+```
+as well as many other lines that do not look like that, and I would like to
+produce a file containing just the urls from those lines.
+How can I use `sed` to do this easily?
+
+I can use a single `sed` command to produce this result. The next few slides
+show how.
+
+---
+name: sed-example1
+## Using `sed` to display the URLS in an HTML file
+
+1. We first write a pattern that matches the lines from which we want to extract
+the URL:
+
+  ```bash
+    sed -n  's/<li><p>\<a href="\([^"]*\)">.*/\1/p' opensource_links.php
+   ```
+  The `-n` option tells `sed` not to print any lines from the input:
+
+   ```bash
+   sed -n ' ' opensource_links.php    # prints nothing
+   ```
+   Without the `-n` option `sed` prints every line, and if you requested a
+ substitution, as in
+
+   ```bash
+   sed  's/<li><p>/foo/'  opensource_links.php
+   ```
+  it will print every line,
+  substituting as directed each first occurrence of `<li><p>` on a line by `foo`.
+
+  If you add a `p` flag to the end of the substitution, and put the `-n` option
+  on `sed`, it  will only print the lines in which you made a substitution:
+
+   ```bash
+    sed -n  's/<li><p>/foo/p'  opensource_links.php
+   ```
+
+---
+name: sed-example2
+## Using `sed` to display the URLS in an HTML file
+
+- If we now use as the target pattern
+
+  `<li><p><a href="\([^"]*\)">.*`
+
+  this will match all lines that start with the `<li><p><a href="` followed
+ by the URL, followed by `">` and followed by any text at all, and
+__it will capture the URL in its variable `\1`__. We use that fact to
+make `\1` the replacement text and add the `p` option:
+
+  ```
+  sed  -n  's/<li><p>\<a href="\([^"]*\)">.*/\1/p' opensource_links.php
+  ```
+ which is the needed command.
+
+- And we can easily create a Markdown files by this next modification:
+
+  ```
+  sed -n  's/<li><p><a href="\([^"]*\)">\([^<]*\)<.*/[\2](\1)\n/p' opensource_links.php
+  ```
 
 ---
 name: cut_paste1
@@ -2221,7 +2418,7 @@ generates a permutation of the integers from 1 to 100 in a file named
 
 1. Write a command that puts the absolute path names to all C or C++ files in
 your home directory or below it in a file named `mysourcecode` in your home
-directory. THese files also include header files with a suffix of `.h`.
+directory. These files also include header files with a suffix of `.h`.
 
 1. Write a command to display the first 10 lines of every file in the current
 working directory.For simplicity, assume that the directory contains only plain
@@ -2312,7 +2509,7 @@ text. You can do any of the following:
     1. Use `vi` or `vim` to do a __global substitution__.
     1. Use a well-designed `sed` command to do all of the replacements in a single shot.
 
- The last alternative is clearly ther best use of your time, and you can ask `sed`
+ The last alternative is clearly the best use of your time, and you can ask `sed`
 to make a backup in case you are nervous about ruining your files.
 
  What is the `vi` substitution that will do this?
@@ -2341,7 +2538,7 @@ regardless of whether there is code to the left of the comment.
     1. Use `vi` or `vim` to do a __global substitution__.
     1. Use a well-designed `sed` command to do all of the replacements in a single shot.
 
- The last alternative is clearly ther best use of your time, and you can ask `sed`
+ The last alternative is clearly the best use of your time, and you can ask `sed`
 to make a backup in case you are nervous about ruining your files.
 
  What is the `vi` substitution that will do this?
@@ -2378,7 +2575,7 @@ they are treated as a single command, e.g.:
 
     </textarea>
 
-<!-- these scripts are used for redering the above as markdown -->
+<!-- these scripts are used for rendering the above as markdown -->
      <script src="js/remark.js" type="text/javascript">
     </script>
     <script src="js/remark_conf.js" type="text/javascript">
